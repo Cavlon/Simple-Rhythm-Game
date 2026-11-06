@@ -1,0 +1,34 @@
+[gd_scene format=3 uid="uid://dj23c3nadrb1d"]
+
+[ext_resource type="Script" uid="uid://blmoynctdd45j" path="res://Gameplay/HitField.cs" id="1_p0tlj"]
+[ext_resource type="Texture2D" uid="uid://coaknmfy848m2" path="res://Skin/Receptors/receptor-up-1.png" id="2_nt8uv"]
+[ext_resource type="Texture2D" uid="uid://xsjcemgebhix" path="res://Skin/Receptors/receptor-up-2.png" id="3_4yakn"]
+[ext_resource type="Script" uid="uid://dmrfb2dka80mq" path="res://Gameplay/HitfieldVisualiser.cs" id="3_a2mtu"]
+[ext_resource type="PackedScene" uid="uid://c7gds51okblml" path="res://Gameplay/receptor.tscn" id="3_ojx8e"]
+[ext_resource type="Texture2D" uid="uid://d26l652sqfuik" path="res://Skin/Receptors/receptor-up-3.png" id="4_lx130"]
+[ext_resource type="Texture2D" uid="uid://ddil1tv4rsx70" path="res://Skin/Receptors/receptor-up-4.png" id="5_224o0"]
+[ext_resource type="Texture2D" uid="uid://bd6pox0ykeuj6" path="res://Skin/Receptors/receptor-down-1.png" id="6_rj8wh"]
+[ext_resource type="Texture2D" uid="uid://ccc78ym7wo00p" path="res://Skin/Receptors/receptor-down-2.png" id="7_ebc5f"]
+[ext_resource type="Texture2D" uid="uid://c1xqu7m6i5ktl" path="res://Skin/Receptors/receptor-down-3.png" id="8_dk8am"]
+[ext_resource type="Texture2D" uid="uid://c1p32ebbkt66y" path="res://Skin/Receptors/receptor-down-4.png" id="9_qkyns"]
+
+[node name="Hitfield" type="Node2D" unique_id=247482771 node_paths=PackedStringArray("receptors")]
+script = ExtResource("1_p0tlj")
+receptors = [NodePath("Receptor1"), NodePath("Receptor2"), NodePath("Receptor3"), NodePath("Receptor4")]
+upTextures = Array[Texture2D]([ExtResource("2_nt8uv"), ExtResource("3_4yakn"), ExtResource("4_lx130"), ExtResource("5_224o0")])
+downTextures = Array[Texture2D]([ExtResource("6_rj8wh"), ExtResource("7_ebc5f"), ExtResource("8_dk8am"), ExtResource("9_qkyns")])
+
+[node name="Receptor1" parent="." unique_id=2081554083 instance=ExtResource("3_ojx8e")]
+position = Vector2(-150, 0)
+
+[node name="Receptor2" parent="." unique_id=49985044 instance=ExtResource("3_ojx8e")]
+position = Vector2(-50, 0)
+
+[node name="Receptor3" parent="." unique_id=777560329 instance=ExtResource("3_ojx8e")]
+position = Vector2(50, 0)
+
+[node name="Receptor4" parent="." unique_id=1867954796 instance=ExtResource("3_ojx8e")]
+position = Vector2(150, 0)
+
+[node name="HitfieldVisualiser" type="Node2D" parent="." unique_id=1212947852]
+script = ExtResource("3_a2mtu")

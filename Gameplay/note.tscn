@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://h5irycy8tmer"]
+
+[ext_resource type="Script" uid="uid://e2elc0eog4he" path="res://Gameplay/Note.cs" id="1_7qumr"]
+[ext_resource type="Texture2D" uid="uid://6qo6xp4wo7ru" path="res://Skin/HitObjects/note-hitobject-1.png" id="2_7qumr"]
+
+[node name="Note" type="Node2D" unique_id=1802176603]
+script = ExtResource("1_7qumr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1123303253]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_7qumr")

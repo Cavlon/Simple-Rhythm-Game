@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://by35pknqrwcyj"]
+
+[ext_resource type="Script" uid="uid://b25gt4bdxaxtb" path="res://Gameplay/Playfield.cs" id="1_1fk6d"]
+[ext_resource type="Texture2D" uid="uid://c00q4r64t21b6" path="res://Skin/stage-bgmask.png" id="2_fri3p"]
+[ext_resource type="PackedScene" uid="uid://dj23c3nadrb1d" path="res://Gameplay/hitfield.tscn" id="4_i1ht5"]
+[ext_resource type="Script" uid="uid://bhhoplqmr3ujh" path="res://Common/NoteManager.cs" id="5_fri3p"]
+[ext_resource type="PackedScene" uid="uid://h5irycy8tmer" path="res://Gameplay/note.tscn" id="6_uswiv"]
+
+[node name="Playfield" type="Node2D" unique_id=536273278 node_paths=PackedStringArray("backgroundSprite", "hitField")]
+script = ExtResource("1_1fk6d")
+backgroundSprite = NodePath("Background")
+hitField = NodePath("Hitfield")
+
+[node name="Background" type="Sprite2D" parent="." unique_id=1832158282]
+modulate = Color(1, 1, 1, 0.29803923)
+texture = ExtResource("2_fri3p")
+
+[node name="Hitfield" parent="." unique_id=247482771 instance=ExtResource("4_i1ht5")]
+position = Vector2(0, 270)
+
+[node name="NoteManager" type="Node2D" parent="." unique_id=705798156 node_paths=PackedStringArray("hitField", "noteHolder")]
+position = Vector2(0, -400)
+script = ExtResource("5_fri3p")
+noteScene = ExtResource("6_uswiv")
+hitField = NodePath("../Hitfield")
+noteHolder = NodePath("../NoteHolder")
+
+[node name="NoteHolder" type="Node2D" parent="." unique_id=1597724582]
