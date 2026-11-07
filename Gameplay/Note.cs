@@ -6,6 +6,8 @@ public partial class Note : Node2D
 
 	Vector2 notePos;
 	public bool alive;
+	
+	Sprite2D sprite;
 
 	GameplaySettings _settings;
 
@@ -13,6 +15,7 @@ public partial class Note : Node2D
 	public override void _Ready()
 	{
 		_settings = DataManager.GameplaySettings;
+		sprite = GetNode<Sprite2D>("Sprite2D");
 		Disable();
 	}
 
@@ -22,12 +25,13 @@ public partial class Note : Node2D
 		Position = notePos;
     }
 
-	public void Spawn(int spawnPosX, float spawnPosY) {
+	public void Spawn(int spawnPosX, float spawnPosY, Texture2D noteTexture) {
 		Visible = true;
 		alive = true;
 		notePos.X = spawnPosX;
 		notePos.Y = spawnPosY;
 		Position = notePos;
+		sprite.Texture = noteTexture;
 		SetProcess(true);
 	}
 

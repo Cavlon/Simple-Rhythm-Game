@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cvm0tkolyylcv"
-path="res://.godot/imported/67potio67.png-3bc366ab3ecef26a09ded9dd40f6e5a3.ctex"
+uid="uid://bidwymmichmoo"
+path="res://.godot/imported/starbucksgiftcard.png-844e23ae3ca4be5dee11d1a8d94b150a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Songs/1/67potio67.png"
-dest_files=["res://.godot/imported/67potio67.png-3bc366ab3ecef26a09ded9dd40f6e5a3.ctex"]
+source_file="res://Songs/42440/starbucksgiftcard.png"
+dest_files=["res://.godot/imported/starbucksgiftcard.png-844e23ae3ca4be5dee11d1a8d94b150a.ctex"]
 
 [params]
 

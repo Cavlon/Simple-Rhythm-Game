@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6p2cx6t36hnp"
-path="res://.godot/imported/shinsekai.png-be899b317cadb2db30cd361f0b20efe6.ctex"
+uid="uid://cvm0tkolyylcv"
+path="res://.godot/imported/67potio67.png-465fa53fb0d13c477c4bd25eacc4a1b8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Songs/2/shinsekai.png"
-dest_files=["res://.godot/imported/shinsekai.png-be899b317cadb2db30cd361f0b20efe6.ctex"]
+source_file="res://Songs/42440/67potio67.png"
+dest_files=["res://.godot/imported/67potio67.png-465fa53fb0d13c477c4bd25eacc4a1b8.ctex"]
 
 [params]
 

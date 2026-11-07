@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bidwymmichmoo"
-path="res://.godot/imported/starbucksgiftcard.png-a456aaffb879a34bb3d6f566836f2084.ctex"
+uid="uid://6p2cx6t36hnp"
+path="res://.godot/imported/shinsekai.png-1b15a24940c343ef2cbac4e110b56dd7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Songs/1/starbucksgiftcard.png"
-dest_files=["res://.godot/imported/starbucksgiftcard.png-a456aaffb879a34bb3d6f566836f2084.ctex"]
+source_file="res://Songs/533/shinsekai.png"
+dest_files=["res://.godot/imported/shinsekai.png-1b15a24940c343ef2cbac4e110b56dd7.ctex"]
 
 [params]
 

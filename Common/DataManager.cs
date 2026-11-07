@@ -12,7 +12,7 @@ public partial class DataManager : Node
         Instance = this;
         GameplaySettings = GD.Load<GameplaySettings>("res://Common/GameplaySettings.tres");
 
-		SelectedSongFolderPath = "res://Songs/3";
+		SelectedSongFolderPath = "res://Songs/563";
 		SelectedChartId = 2044;
     }
 }

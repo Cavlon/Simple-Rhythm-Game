@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Simple Rythm Game"
+config/name="Maximum Tempo"
 run/main_scene="uid://ddofev7yran3h"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
@@ -21,6 +21,7 @@ DataManager="*uid://d3hf54c5eoou"
 
 [display]
 
+window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"

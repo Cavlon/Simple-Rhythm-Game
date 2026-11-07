@@ -1,36 +1,38 @@
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection.Emit;
 
 public partial class NoteManager : Node2D
 {
 
 	[Export] PackedScene noteScene;
-	[Export] HitField hitField;
 	[Export] Node2D noteHolder;
+	[Export] Texture2D[] noteTextures;
 
 	GameplaySettings _settings;
+	MusicManager musicManager;
 
-	public int scrollSpeed;
+	int scrollSpeed;
 
 	int[] spawnPositions = new int[4];
-
 	Note[] notePool;
-	Queue<int>[] activeNotes = new Queue<int>[4];
+	Queue<(int, int)>[] activeNotes = new Queue<(int, int)>[4];
 	int pullInd = 0;
 	int poolCount;
 
+	HitField hitField;
 	int hitFieldCenter;
 	float[] judgements = new float[4];
-	string[] judgmentNames = ["Marvelous", "Perfect", "Great", "Miss"];
 
-	public override void _Ready()
+	[Signal]
+    public delegate void NoteJudgedEventHandler(int judgement, float errorTime);
+
+	public void Initialise(MusicManager _musicManager, HitField _hitfield)
 	{
 		_settings = DataManager.GameplaySettings;
 		scrollSpeed = _settings.scrollSpeed;
+		musicManager = _musicManager;
+		hitField = _hitfield;
 
 		int paddedWidth = _settings.playfieldWidth - _settings.playfieldPadding * 2;
 
@@ -54,29 +56,25 @@ public partial class NoteManager : Node2D
 
 		hitFieldCenter = (int)hitField.Position.Y - _settings.hitOffset;
 
-		float scale = _settings.scrollSpeed / 1000f;
-
-		judgements[0] = _settings.marvelousWindow * scale;
-        judgements[1] = _settings.perfectWindow * scale;
-        judgements[2] = _settings.greatWindow * scale;
-        judgements[3] = _settings.missWindow * scale;
+		judgements[0] = _settings.marvelousWindow;
+        judgements[1] = _settings.perfectWindow;
+        judgements[2] = _settings.greatWindow;
+        judgements[3] = _settings.missWindow;
 	}
 
 	public override void _Process(double delta)
 	{
-		if (Input.IsActionJustPressed("spawn_note")) SpawnNote(0);
-
 		for (int i = 0; i < 4; i++)
         {
             while (activeNotes[i].Count > 0)
             {
-                int poolIndex = activeNotes[i].Peek();
+                int poolIndex = activeNotes[i].Peek().Item1;
                 Note note = notePool[poolIndex];
 
-                if (note.Position.Y < 350) 
+                if (note.Position.Y < 400) 
                     break;
 
-				GD.Print(judgmentNames[3]);
+				EmitSignal(SignalName.NoteJudged, 3, -1);
                 activeNotes[i].Dequeue();
                 note.Disable();
                 poolCount++;
@@ -84,13 +82,13 @@ public partial class NoteManager : Node2D
         }
 	}
 
-	public void SpawnNote(int lane) {
+	public void SpawnNote(int lane, int startTime) {
 		if (poolCount == 0) {
 			GD.PrintErr("Note Pool Empty");
 		}
 
-		activeNotes[lane].Enqueue(pullInd);
-		notePool[pullInd].Spawn(spawnPositions[lane], Position.Y);
+		activeNotes[lane].Enqueue((pullInd, startTime));
+		notePool[pullInd].Spawn(spawnPositions[lane], Position.Y, noteTextures[lane]);
 
 		pullInd = (pullInd + 1) % _settings.notePoolSize;
 		poolCount--;
@@ -99,10 +97,9 @@ public partial class NoteManager : Node2D
 	public void DestroyNote(int lane) {
 		if (activeNotes[lane].Count == 0) return;
 
-		int poolIndex = activeNotes[lane].Peek();
+		int poolIndex = activeNotes[lane].Dequeue().Item1;
 		Note note = notePool[poolIndex];
 
-		activeNotes[lane].Dequeue();
 		note.Disable();
 		poolCount++;
 	}
@@ -110,14 +107,15 @@ public partial class NoteManager : Node2D
 	public void LaneInput(int lane) {
 		if (activeNotes[lane].Count == 0) return;
 
-		int poolIndex = activeNotes[lane].Peek();
-		Note note = notePool[poolIndex];
+		(int, int) activeNote = activeNotes[lane].Peek();
+		Note note = notePool[activeNote.Item1];
 
-		float dist = Math.Abs(note.Position.Y - hitFieldCenter);
+		float dist = Math.Abs(musicManager.songTime - activeNote.Item2);
 
 		for (int i = 0; i < 4; i++) {
 			if (dist < judgements[i]) {
-				GD.Print(judgmentNames[i]);
+				EmitSignal(SignalName.NoteJudged, i, dist);
+
 				activeNotes[lane].Dequeue();
 				note.Disable();
 				poolCount++;

@@ -4,11 +4,11 @@ using System.IO;
 public partial class MusicManager : AudioStreamPlayer2D
 {
 
-	public float songTime = -1f;
+	public int songTime = -1000;
 	bool songStarted = false;
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public void Initialise()
 	{
 		string[] mp3Files = Directory.GetFiles(ProjectSettings.GlobalizePath(DataManager.Instance.SelectedSongFolderPath), "*.mp3");
 		Stream = (AudioStream)GD.Load(mp3Files[0]);
@@ -18,20 +18,15 @@ public partial class MusicManager : AudioStreamPlayer2D
 	public override void _Process(double delta)
 	{
 		if (!songStarted) {
-			songTime += (float)delta;
+			songTime += (int)(delta * 1000);
 
-			if (songTime > 0f) {
+			if (songTime > 0) {
 				songTime = 0;
 				Play();
 				songStarted = true;
 			}
 		} else {
-			songTime = GetPlaybackPosition() + (float)AudioServer.GetTimeSinceLastMix() - (float)AudioServer.GetOutputLatency();
+			songTime = (int)((GetPlaybackPosition() + (float)(AudioServer.GetTimeSinceLastMix() - AudioServer.GetOutputLatency())) * 1000);
 		}
 	}
-
-	public float GetSongPos()
-    {
-        return songTime;
-    }
 }

@@ -27,7 +27,7 @@ public class QuaChart
 public class QuaNote
 {
     [YamlMember(Alias = "StartTime")]
-    public float StartTime { get; set; }
+    public int StartTime { get; set; }
 
     [YamlMember(Alias = "Lane")]
     public int Lane { get; set; }

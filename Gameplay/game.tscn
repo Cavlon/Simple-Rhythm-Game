@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://ddofev7yran3h"]
+
+[ext_resource type="Script" uid="uid://gb2huhnj1wbv" path="res://Gameplay/GameManager.cs" id="1_c4nfj"]
+[ext_resource type="PackedScene" uid="uid://by35pknqrwcyj" path="res://Gameplay/playfield.tscn" id="2_evi6s"]
+[ext_resource type="Script" uid="uid://ch0c5qv2p8dbt" path="res://Common/ChartManager.cs" id="3_3cnyo"]
+[ext_resource type="Script" uid="uid://bifglats1pj6y" path="res://Common/InputManager.cs" id="4_20gy4"]
+[ext_resource type="Script" uid="uid://5b4ppkednjxf" path="res://Common/MusicManager.cs" id="5_at3nd"]
+[ext_resource type="PackedScene" uid="uid://xk1p305njt3i" path="res://Gameplay/ui.tscn" id="6_8deg3"]
+
+[node name="GameManager" type="Node" unique_id=264320428]
+script = ExtResource("1_c4nfj")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1315430213]
+
+[node name="Playfield" parent="." unique_id=536273278 instance=ExtResource("2_evi6s")]
+
+[node name="ChartManager" type="Node" parent="." unique_id=1867167604]
+script = ExtResource("3_3cnyo")
+
+[node name="InputManager" type="Node" parent="." unique_id=1077420347]
+script = ExtResource("4_20gy4")
+
+[node name="MusicManager" type="AudioStreamPlayer2D" parent="." unique_id=777670653]
+script = ExtResource("5_at3nd")
+
+[node name="UI" parent="." unique_id=1403210348 instance=ExtResource("6_8deg3")]

@@ -3,17 +3,19 @@ using System;
 
 public partial class InputManager : Node
 {
+	NoteManager noteManager;
+	HitField hitField;
 
-	[Export] NoteManager noteManager;
-	[Export] HitField hitField;
 	GameplaySettings _settings;
 
 	bool[] buttonDown = [false, false, false, false];
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public void Initialise(NoteManager _noteManager, HitField _hitField)
 	{
 		_settings = DataManager.GameplaySettings;
+		noteManager = _noteManager;
+		hitField = _hitField;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

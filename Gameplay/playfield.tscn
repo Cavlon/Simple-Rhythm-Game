@@ -4,12 +4,15 @@
 [ext_resource type="Texture2D" uid="uid://c00q4r64t21b6" path="res://Skin/stage-bgmask.png" id="2_fri3p"]
 [ext_resource type="PackedScene" uid="uid://dj23c3nadrb1d" path="res://Gameplay/hitfield.tscn" id="4_i1ht5"]
 [ext_resource type="Script" uid="uid://bhhoplqmr3ujh" path="res://Common/NoteManager.cs" id="5_fri3p"]
+[ext_resource type="Texture2D" uid="uid://6qo6xp4wo7ru" path="res://Skin/HitObjects/note-hitobject-1.png" id="6_cqp8x"]
 [ext_resource type="PackedScene" uid="uid://h5irycy8tmer" path="res://Gameplay/note.tscn" id="6_uswiv"]
+[ext_resource type="Texture2D" uid="uid://btcbf4d1iyvj0" path="res://Skin/HitObjects/note-hitobject-2.png" id="7_w8ite"]
+[ext_resource type="Texture2D" uid="uid://c0ejrt61brlrq" path="res://Skin/HitObjects/note-hitobject-3.png" id="8_tcdvd"]
+[ext_resource type="Texture2D" uid="uid://ccfexus037m3k" path="res://Skin/HitObjects/note-hitobject-4.png" id="9_j8tju"]
 
-[node name="Playfield" type="Node2D" unique_id=536273278 node_paths=PackedStringArray("backgroundSprite", "hitField")]
+[node name="Playfield" type="Node2D" unique_id=536273278 node_paths=PackedStringArray("backgroundSprite")]
 script = ExtResource("1_1fk6d")
 backgroundSprite = NodePath("Background")
-hitField = NodePath("Hitfield")
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1832158282]
 modulate = Color(1, 1, 1, 0.29803923)
@@ -18,11 +21,11 @@ texture = ExtResource("2_fri3p")
 [node name="Hitfield" parent="." unique_id=247482771 instance=ExtResource("4_i1ht5")]
 position = Vector2(0, 270)
 
-[node name="NoteManager" type="Node2D" parent="." unique_id=705798156 node_paths=PackedStringArray("hitField", "noteHolder")]
+[node name="NoteManager" type="Node2D" parent="." unique_id=705798156 node_paths=PackedStringArray("noteHolder")]
 position = Vector2(0, -400)
 script = ExtResource("5_fri3p")
 noteScene = ExtResource("6_uswiv")
-hitField = NodePath("../Hitfield")
 noteHolder = NodePath("../NoteHolder")
+noteTextures = Array[Texture2D]([ExtResource("6_cqp8x"), ExtResource("7_w8ite"), ExtResource("8_tcdvd"), ExtResource("9_j8tju")])
 
 [node name="NoteHolder" type="Node2D" parent="." unique_id=1597724582]

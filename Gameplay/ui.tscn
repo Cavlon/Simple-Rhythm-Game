@@ -1,0 +1,162 @@
+[gd_scene format=3 uid="uid://xk1p305njt3i"]
+
+[ext_resource type="Script" uid="uid://biqtfxe7qxcos" path="res://Gameplay/GameUIManager.cs" id="1_t47q1"]
+[ext_resource type="Theme" uid="uid://dkqf73l6hqg84" path="res://Themes/default_theme.tres" id="2_oig81"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gl68d"]
+bg_color = Color(0.15686275, 0.15686275, 0.15686275, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1w1ch"]
+bg_color = Color(0.89411765, 0.7019608, 0.24313726, 1)
+
+[node name="UI" type="CanvasLayer" unique_id=1403210348 node_paths=PackedStringArray("accuracyLabel", "judgementLabel", "songTitleLabel", "songArtistLabel", "charterLabel", "songProgressLabel", "songRemainingLabel", "songProgressBar")]
+script = ExtResource("1_t47q1")
+accuracyLabel = NodePath("Control/AccuracyLabel")
+judgementLabel = NodePath("Control/JudgementLabel")
+songTitleLabel = NodePath("Control/VBoxContainer/SongTitleLabel")
+songArtistLabel = NodePath("Control/VBoxContainer/SongArtistLabel")
+charterLabel = NodePath("Control/VBoxContainer/CharterLabel")
+songProgressLabel = NodePath("Control/Control/ProgressLabel")
+songRemainingLabel = NodePath("Control/Control/RemainingLabel")
+songProgressBar = NodePath("Control/Control/ProgressBar")
+
+[node name="Control" type="Control" parent="." unique_id=1957208509]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="AccuracyLabel" type="RichTextLabel" parent="Control" unique_id=1386119755]
+layout_mode = 0
+offset_left = 30.0
+offset_top = 20.0
+offset_right = 253.0
+offset_bottom = 135.0
+offset_transform_position = Vector2(30, 20)
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 60
+text = "100%"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control" unique_id=413236171]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -461.0
+offset_right = 0.00048828125
+offset_bottom = 833.0
+grow_horizontal = 0
+pivot_offset_ratio = Vector2(1, 0)
+offset_transform_enabled = true
+offset_transform_position = Vector2(-30, 20)
+theme_override_constants/separation = -2
+
+[node name="SongTitleLabel" type="RichTextLabel" parent="Control/VBoxContainer" unique_id=2141687836]
+layout_mode = 2
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 40
+fit_content = true
+horizontal_alignment = 2
+
+[node name="SongArtistLabel" type="RichTextLabel" parent="Control/VBoxContainer" unique_id=1333806922]
+layout_mode = 2
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 30
+fit_content = true
+horizontal_alignment = 2
+
+[node name="Spacer" type="Control" parent="Control/VBoxContainer" unique_id=303364659]
+custom_minimum_size = Vector2(0, 18.1)
+layout_mode = 2
+
+[node name="CharterLabel" type="RichTextLabel" parent="Control/VBoxContainer" unique_id=1271080267]
+layout_mode = 2
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 25
+fit_content = true
+horizontal_alignment = 2
+
+[node name="JudgementLabel" type="RichTextLabel" parent="Control" unique_id=1454439300]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = -20.0
+offset_right = 95.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset_ratio = Vector2(0.5, 0.5)
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 15
+text = "Marvelous"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="Control" unique_id=2061085682]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ProgressLabel" type="RichTextLabel" parent="Control/Control" unique_id=102142442]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -55.0
+offset_right = 93.0
+offset_bottom = -15.0
+grow_vertical = 0
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 20
+text = "1:00"
+fit_content = true
+vertical_alignment = 2
+
+[node name="RemainingLabel" type="RichTextLabel" parent="Control/Control" unique_id=1276186466]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -93.0
+offset_top = -55.0
+offset_right = -10.0
+offset_bottom = -15.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("2_oig81")
+theme_override_font_sizes/normal_font_size = 20
+text = "-1:00"
+fit_content = true
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/Control" unique_id=789321360]
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -10.5
+offset_bottom = 1.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_gl68d")
+theme_override_styles/fill = SubResource("StyleBoxFlat_1w1ch")
+show_percentage = false

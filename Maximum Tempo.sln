@@ -1,6 +1,6 @@
 ﻿Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Beat Blaze Blues", "Beat Blaze Blues.csproj", "{D4EA27FC-B851-451E-A4A3-FE9D1E21F5EB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Maximum Tempo", "Maximum Tempo.csproj", "{D4EA27FC-B851-451E-A4A3-FE9D1E21F5EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

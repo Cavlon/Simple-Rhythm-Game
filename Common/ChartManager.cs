@@ -3,34 +3,42 @@ using System;
 
 public partial class ChartManager : Node
 {
+	public GameManager gameManager;
 
-	[Export] MusicManager musicManager;
-	[Export] NoteManager noteManager;
-	[Export] HitField hitField;
+	MusicManager musicManager;
+	NoteManager noteManager;
+	HitField hitField;
 
 	GameplaySettings _settings;
-	Parser parser;
 	QuaChart chart;
 	int notePointer = 0;
 
-	float lookAhead = 0;
+	int lookAhead = 0;
+	
+	public int chartLength;
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public void Initialise(MusicManager _musicManager, NoteManager _noteManager, HitField _hitField, QuaChart _chart)
 	{
 		_settings = DataManager.GameplaySettings;
 
-		parser = new Parser();
-		chart = parser.ParseQua(ProjectSettings.GlobalizePath(DataManager.Instance.SelectedSongFolderPath), DataManager.Instance.SelectedChartId);
-		lookAhead = (hitField.Position.Y - noteManager.Position.Y) / _settings.scrollSpeed;
+		musicManager = _musicManager;
+		noteManager = _noteManager;
+		hitField = _hitField;
+
+		chart = _chart;
+
+		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _settings.scrollSpeed);
 		musicManager.songTime -= lookAhead;
+
+		chartLength = chart.HitObjects[^1].StartTime;
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (notePointer < chart.HitObjects.Count && musicManager.GetSongPos()+lookAhead > chart.HitObjects[notePointer].StartTime/1000) {
-			noteManager.SpawnNote(chart.HitObjects[notePointer].Lane-1);
+		if (notePointer < chart.HitObjects.Count && musicManager.songTime + lookAhead > chart.HitObjects[notePointer].StartTime) {
+			noteManager.SpawnNote(chart.HitObjects[notePointer].Lane-1, chart.HitObjects[notePointer].StartTime);
 			notePointer++;
 		}
 	}
