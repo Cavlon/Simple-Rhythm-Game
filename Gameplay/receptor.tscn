@@ -1,11 +1,9 @@
 [gd_scene format=3 uid="uid://c7gds51okblml"]
 
 [ext_resource type="Script" uid="uid://dvhh7fnssikfg" path="res://Gameplay/Receptor.cs" id="1_vtjv3"]
-[ext_resource type="Texture2D" uid="uid://o2j71ib7ebah" path="res://Skin/Receptors/receptor-up-1.png" id="2_58l16"]
 
 [node name="Receptor" type="Node2D" unique_id=2081554083]
 script = ExtResource("1_vtjv3")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1700445506]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("2_58l16")

@@ -7,7 +7,6 @@ public partial class HitField : Node2D
 	[Export] Receptor[] receptors;
 	[Export] Texture2D[] upTextures;
 	[Export] Texture2D[] downTextures;
-	[Export] Sprite2D hitline;
 
 	GameplaySettings _settings;
 	
@@ -23,6 +22,7 @@ public partial class HitField : Node2D
 		for (int i = 0; i < 4; i++) {
 			receptors[i].Position = new Vector2(pos, 0);
 			receptors[i].Scale = Vector2.One * _settings.receptorScale;
+			receptors[i].SetTexture(upTextures[i]);
 			pos += spacing;
 		}
 	}

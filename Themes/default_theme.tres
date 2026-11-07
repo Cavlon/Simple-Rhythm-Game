@@ -1,7 +1,0 @@
-[gd_resource type="Theme" format=3 uid="uid://dkqf73l6hqg84"]
-
-[ext_resource type="FontFile" uid="uid://ch5ajfkqhis70" path="res://Fonts/Gabarito-Bold.ttf" id="1_m7ogn"]
-
-[resource]
-default_font = ExtResource("1_m7ogn")
-default_font_size = 30

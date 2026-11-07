@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="GameplaySettings" format=3 uid="uid://cmv1685efl8vo"]
+
+[ext_resource type="Script" uid="uid://qsdq4vpavup2" path="res://System/GameplaySettings.cs" id="1_hxeci"]
+
+[resource]
+script = ExtResource("1_hxeci")
+playfieldWidth = 280
+receptorPosY = 50
+scrollSpeed = 1000
+notePoolSize = 400
+metadata/_custom_type_script = "uid://qsdq4vpavup2"

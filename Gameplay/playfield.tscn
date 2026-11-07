@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://by35pknqrwcyj"]
 
 [ext_resource type="Script" uid="uid://b25gt4bdxaxtb" path="res://Gameplay/Playfield.cs" id="1_1fk6d"]
-[ext_resource type="Texture2D" uid="uid://c00q4r64t21b6" path="res://Skin/stage-bgmask.png" id="2_fri3p"]
+[ext_resource type="Texture2D" uid="uid://c00q4r64t21b6" path="res://Assets/Skin/stage-bgmask.png" id="2_fri3p"]
 [ext_resource type="PackedScene" uid="uid://dj23c3nadrb1d" path="res://Gameplay/hitfield.tscn" id="4_i1ht5"]
-[ext_resource type="Script" uid="uid://bhhoplqmr3ujh" path="res://Common/NoteManager.cs" id="5_fri3p"]
-[ext_resource type="Texture2D" uid="uid://6qo6xp4wo7ru" path="res://Skin/HitObjects/note-hitobject-1.png" id="6_cqp8x"]
+[ext_resource type="Script" uid="uid://bhhoplqmr3ujh" path="res://System/NoteManager.cs" id="5_fri3p"]
+[ext_resource type="Texture2D" uid="uid://6qo6xp4wo7ru" path="res://Assets/Skin/HitObjects/note-hitobject-1.png" id="6_cqp8x"]
 [ext_resource type="PackedScene" uid="uid://h5irycy8tmer" path="res://Gameplay/note.tscn" id="6_uswiv"]
-[ext_resource type="Texture2D" uid="uid://btcbf4d1iyvj0" path="res://Skin/HitObjects/note-hitobject-2.png" id="7_w8ite"]
-[ext_resource type="Texture2D" uid="uid://c0ejrt61brlrq" path="res://Skin/HitObjects/note-hitobject-3.png" id="8_tcdvd"]
-[ext_resource type="Texture2D" uid="uid://ccfexus037m3k" path="res://Skin/HitObjects/note-hitobject-4.png" id="9_j8tju"]
+[ext_resource type="Texture2D" uid="uid://btcbf4d1iyvj0" path="res://Assets/Skin/HitObjects/note-hitobject-2.png" id="7_w8ite"]
+[ext_resource type="Texture2D" uid="uid://c0ejrt61brlrq" path="res://Assets/Skin/HitObjects/note-hitobject-3.png" id="8_tcdvd"]
+[ext_resource type="Texture2D" uid="uid://ccfexus037m3k" path="res://Assets/Skin/HitObjects/note-hitobject-4.png" id="9_j8tju"]
 
 [node name="Playfield" type="Node2D" unique_id=536273278 node_paths=PackedStringArray("backgroundSprite")]
 script = ExtResource("1_1fk6d")
