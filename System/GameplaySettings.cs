@@ -3,14 +3,9 @@ using Godot;
 [GlobalClass]
 public partial class GameplaySettings : Resource
 {
-    [ExportGroup("Playfield")]
-    [Export] public int playfieldWidth = 500;
-    [Export] public int playfieldPadding = -30;
-
     [ExportGroup("Receptors")]
 	[Export] public int receptorPosY = 270;
 	[Export] public int hitOffset = 0;
-    [Export] public float receptorScale = 1f;
 
     [ExportGroup("Notes")]
     [Export] public int scrollSpeed = 20;

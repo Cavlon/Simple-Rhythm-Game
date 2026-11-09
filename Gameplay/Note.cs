@@ -9,19 +9,19 @@ public partial class Note : Node2D
 	
 	Sprite2D sprite;
 
-	GameplaySettings _settings;
+	GameplaySettings _gameSettings;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		_settings = DataManager.GameplaySettings;
+		_gameSettings = DataManager.GameplaySettings;
 		sprite = GetNode<Sprite2D>("Sprite2D");
 		Disable();
 	}
 
     public override void _Process(double delta)
     {
-		notePos.Y += _settings.scrollSpeed * (float)delta;
+		notePos.Y += _gameSettings.scrollSpeed * (float)delta;
 		Position = notePos;
     }
 

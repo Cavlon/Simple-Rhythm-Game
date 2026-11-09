@@ -15,6 +15,8 @@ public partial class GameManager : Node
 	float accuracySum = 0f;
 	int notesProcessed = 0;
 	float accuracy;
+	int combo = 0;
+
 	float[] judgementAccuracies = [100f, 98.25f, 65f, 0f];
 	(string, Color)[] judgementStyles = [("Marvelous", Colors.White), ("Perfect", new Color("e4b33e")), ("Great", new Color("39CFB1")), ("Miss", new Color("FC6880"))];
 
@@ -48,9 +50,13 @@ public partial class GameManager : Node
 		notesProcessed++;
 		accuracySum += judgementAccuracies[judgement];
 
+		if (judgement < 3) combo++;
+		else combo = 0;
+
 		accuracy = accuracySum / notesProcessed;
 		uiManager.SetAccuracy(accuracy);
 		uiManager.SetJudgement(judgementStyles[judgement].Item1, judgementStyles[judgement].Item2);
+		uiManager.SetCombo(combo);
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.

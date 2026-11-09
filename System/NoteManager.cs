@@ -9,7 +9,8 @@ public partial class NoteManager : Node2D
 	[Export] Node2D noteHolder;
 	[Export] Texture2D[] noteTextures;
 
-	GameplaySettings _settings;
+	GameplaySettings _gameSettings;
+	StyleSettings _styleSettings;
 	MusicManager musicManager;
 
 	int scrollSpeed;
@@ -29,37 +30,39 @@ public partial class NoteManager : Node2D
 
 	public void Initialise(MusicManager _musicManager, HitField _hitfield)
 	{
-		_settings = DataManager.GameplaySettings;
-		scrollSpeed = _settings.scrollSpeed;
+		_gameSettings = DataManager.GameplaySettings;
+		_styleSettings = DataManager.StyleSettings;
+
+		scrollSpeed = _gameSettings.scrollSpeed;
 		musicManager = _musicManager;
 		hitField = _hitfield;
 
-		int paddedWidth = _settings.playfieldWidth - _settings.playfieldPadding * 2;
+		int paddedWidth = _styleSettings.playfieldWidth - _styleSettings.playfieldPadding * 2;
 
 		int spacing = paddedWidth/5;
-		int pos = -_settings.playfieldWidth/2 + _settings.playfieldPadding + spacing;
+		int pos = -_styleSettings.playfieldWidth/2 + _styleSettings.playfieldPadding + spacing;
 		for (int i = 0; i < 4; i++) {
 			activeNotes[i] = [];
 			spawnPositions[i] = pos;
 			pos += spacing;
 		}
 
-		poolCount = _settings.notePoolSize;
+		poolCount = _gameSettings.notePoolSize;
 		notePool = new Note[poolCount];
 
 		for (int i = 0; i < poolCount; i++) {
 			Note note = noteScene.Instantiate<Note>();
 			noteHolder.AddChild(note);
-			note.Scale = Vector2.One * _settings.receptorScale;
+			note.Scale = Vector2.One * _styleSettings.receptorScale;
 			notePool[i] = note;
 		}
 
-		hitFieldCenter = (int)hitField.Position.Y - _settings.hitOffset;
+		hitFieldCenter = (int)hitField.Position.Y - _gameSettings.hitOffset;
 
-		judgements[0] = _settings.marvelousWindow;
-        judgements[1] = _settings.perfectWindow;
-        judgements[2] = _settings.greatWindow;
-        judgements[3] = _settings.missWindow;
+		judgements[0] = _gameSettings.marvelousWindow;
+        judgements[1] = _gameSettings.perfectWindow;
+        judgements[2] = _gameSettings.greatWindow;
+        judgements[3] = _gameSettings.missWindow;
 	}
 
 	public override void _Process(double delta)
@@ -90,7 +93,7 @@ public partial class NoteManager : Node2D
 		activeNotes[lane].Enqueue((pullInd, startTime));
 		notePool[pullInd].Spawn(spawnPositions[lane], Position.Y, noteTextures[lane]);
 
-		pullInd = (pullInd + 1) % _settings.notePoolSize;
+		pullInd = (pullInd + 1) % _gameSettings.notePoolSize;
 		poolCount--;
 	}
 

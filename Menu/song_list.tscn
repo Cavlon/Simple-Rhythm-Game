@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://mywrep0fp63v"]
+
+[ext_resource type="Script" uid="uid://c441yixu5dqru" path="res://Menu/SongList.cs" id="1_4ecin"]
+[ext_resource type="PackedScene" uid="uid://busjw1amfeuvv" path="res://Menu/song_entry.tscn" id="2_0ewhv"]
+
+[node name="SongList" type="Control" unique_id=904538529]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -692.0
+grow_horizontal = 0
+grow_vertical = 2
+script = ExtResource("1_4ecin")
+spacing = 6.0
+entryCount = 50
+scrollTickAmount = 40.0
+
+[node name="SongEntry" parent="." unique_id=1039781950 instance=ExtResource("2_0ewhv")]
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+grow_horizontal = 1

@@ -9,7 +9,7 @@ public partial class ChartManager : Node
 	NoteManager noteManager;
 	HitField hitField;
 
-	GameplaySettings _settings;
+	GameplaySettings _gameSettings;
 	QuaChart chart;
 	int notePointer = 0;
 
@@ -20,7 +20,7 @@ public partial class ChartManager : Node
 	// Called when the node enters the scene tree for the first time.
 	public void Initialise(MusicManager _musicManager, NoteManager _noteManager, HitField _hitField, QuaChart _chart)
 	{
-		_settings = DataManager.GameplaySettings;
+		_gameSettings = DataManager.GameplaySettings;
 
 		musicManager = _musicManager;
 		noteManager = _noteManager;
@@ -28,7 +28,7 @@ public partial class ChartManager : Node
 
 		chart = _chart;
 
-		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _settings.scrollSpeed);
+		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _gameSettings.scrollSpeed);
 		musicManager.songTime -= lookAhead;
 
 		chartLength = chart.HitObjects[^1].StartTime;

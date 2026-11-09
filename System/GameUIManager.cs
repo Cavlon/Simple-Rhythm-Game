@@ -6,6 +6,7 @@ public partial class GameUIManager : CanvasLayer
 
 	[Export] RichTextLabel accuracyLabel;
 	[Export] RichTextLabel judgementLabel;
+	[Export] RichTextLabel comboLabel;
 
 	[Export] RichTextLabel songTitleLabel;
 	[Export] RichTextLabel songArtistLabel;
@@ -15,15 +16,25 @@ public partial class GameUIManager : CanvasLayer
 	[Export] RichTextLabel songRemainingLabel;
 	[Export] ProgressBar songProgressBar;
 
+	StyleSettings _styleSettings;
+
 	MusicManager musicManager;
 	ChartManager chartManager;
 
 	Tween judgementTween;
+	Tween comboTween;
 
 	public void Initialise(MusicManager _musicManager, ChartManager _chartManager) {
+		_styleSettings = DataManager.StyleSettings;
+
 		musicManager = _musicManager;
 		chartManager = _chartManager;
+
 		songProgressBar.MaxValue = chartManager.chartLength;
+		judgementLabel.Position -= Vector2.Down * _styleSettings.judgementPosY;
+		comboLabel.Position -= Vector2.Down * _styleSettings.comboPosY;
+
+		comboLabel.AddThemeFontSizeOverride("font_size", _styleSettings.comboSize);
 	}
 
 	public void SetAccuracy(float accuracy) {
@@ -49,6 +60,36 @@ public partial class GameUIManager : CanvasLayer
             .SetDelay(0.15f)
             .SetTrans(Tween.TransitionType.Sine)
             .SetEase(Tween.EaseType.In);
+	}
+
+	public void SetCombo(int combo) {
+		if (combo > 20) {
+			comboLabel.Text = combo.ToString();
+
+			comboLabel.Scale = Vector2.One * 0.8f;
+			comboLabel.Modulate = new Color(Colors.White, 1f);
+
+			if (comboTween != null && comboTween.IsRunning()) {
+				comboTween.Kill();
+			}
+
+			comboTween = CreateTween().SetParallel(true);
+
+			comboTween.TweenProperty(comboLabel, "scale", Vector2.One, 0.12f)
+				.SetTrans(Tween.TransitionType.Back)
+				.SetEase(Tween.EaseType.Out);
+
+		} else if (comboLabel.Modulate.A == 1f) {
+			if (comboTween != null && comboTween.IsRunning()) {
+				comboTween.Kill();
+			}
+
+			comboTween = CreateTween().SetParallel(true);
+
+			comboTween.TweenProperty(comboLabel, "modulate:a", 0.0f, 0.1f)
+				.SetTrans(Tween.TransitionType.Sine)
+				.SetEase(Tween.EaseType.In);
+		}
 	}
 
 	public void SetSongDetails(string title, string artist, string charter) {

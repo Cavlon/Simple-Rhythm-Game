@@ -10,12 +10,15 @@ public partial class Playfield : Node2D
 	public HitField hitField;
 	public GameManager gameManager;
 
-	GameplaySettings _settings;
+	GameplaySettings _gameSettings;
+	StyleSettings _styleSettings;
 
 	// Called when the node enters the scene tree for the first time.
 	public void Initialise(GameManager _gameManager)
 	{
-		_settings = DataManager.GameplaySettings;
+		_gameSettings = DataManager.GameplaySettings;
+		_styleSettings = DataManager.StyleSettings;
+		
 		gameManager = _gameManager;
 
 		noteManager = GetNode<NoteManager>("NoteManager");
@@ -23,15 +26,10 @@ public partial class Playfield : Node2D
 
 		noteManager.Initialise(gameManager.musicManager, hitField);
 
-		backgroundSprite.Scale = new Vector2((float)_settings.playfieldWidth / backgroundSprite.Texture.GetWidth(), 1f);
+		backgroundSprite.Scale = new Vector2((float)_styleSettings.playfieldWidth / backgroundSprite.Texture.GetWidth(), 1f);
 
 		Vector2 viewportSize = GetViewportRect().Size;
 
-		hitField.Position = new Vector2(0, viewportSize.Y / 2 - _settings.receptorPosY);
-	}
-
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
+		hitField.Position = new Vector2(0, viewportSize.Y / 2 - _gameSettings.receptorPosY);
 	}
 }
