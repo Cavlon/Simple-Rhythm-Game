@@ -15,7 +15,6 @@ grow_horizontal = 0
 grow_vertical = 2
 script = ExtResource("1_4ecin")
 spacing = 6.0
-entryCount = 50
 scrollTickAmount = 40.0
 
 [node name="SongEntry" parent="." unique_id=1039781950 instance=ExtResource("2_0ewhv")]

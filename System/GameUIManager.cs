@@ -18,16 +18,15 @@ public partial class GameUIManager : CanvasLayer
 
 	StyleSettings _styleSettings;
 
-	MusicManager musicManager;
 	ChartManager chartManager;
 
 	Tween judgementTween;
 	Tween comboTween;
+	Tween comboAlphaTween;
 
-	public void Initialise(MusicManager _musicManager, ChartManager _chartManager) {
+	public void Initialise(ChartManager _chartManager) {
 		_styleSettings = DataManager.StyleSettings;
 
-		musicManager = _musicManager;
 		chartManager = _chartManager;
 
 		songProgressBar.MaxValue = chartManager.chartLength;
@@ -67,7 +66,6 @@ public partial class GameUIManager : CanvasLayer
 			comboLabel.Text = combo.ToString();
 
 			comboLabel.Scale = Vector2.One * 0.8f;
-			comboLabel.Modulate = new Color(Colors.White, 1f);
 
 			if (comboTween != null && comboTween.IsRunning()) {
 				comboTween.Kill();
@@ -79,14 +77,26 @@ public partial class GameUIManager : CanvasLayer
 				.SetTrans(Tween.TransitionType.Back)
 				.SetEase(Tween.EaseType.Out);
 
-		} else if (comboLabel.Modulate.A == 1f) {
-			if (comboTween != null && comboTween.IsRunning()) {
-				comboTween.Kill();
+			if (comboLabel.Modulate.A == 0f) {
+				if (comboAlphaTween != null && comboAlphaTween.IsRunning()) {
+					comboAlphaTween.Kill();
+				}
+
+				comboAlphaTween = CreateTween().SetParallel(true);
+
+				comboAlphaTween.TweenProperty(comboLabel, "modulate:a", 1.0f, 0.1f)
+					.SetTrans(Tween.TransitionType.Sine)
+					.SetEase(Tween.EaseType.In);
 			}
 
-			comboTween = CreateTween().SetParallel(true);
+		} else if (comboLabel.Modulate.A == 1f) {
+			if (comboAlphaTween != null && comboAlphaTween.IsRunning()) {
+				comboAlphaTween.Kill();
+			}
 
-			comboTween.TweenProperty(comboLabel, "modulate:a", 0.0f, 0.1f)
+			comboAlphaTween = CreateTween().SetParallel(true);
+
+			comboAlphaTween.TweenProperty(comboLabel, "modulate:a", 0.0f, 0.1f)
 				.SetTrans(Tween.TransitionType.Sine)
 				.SetEase(Tween.EaseType.In);
 		}
@@ -100,19 +110,19 @@ public partial class GameUIManager : CanvasLayer
 
     public override void _Process(double delta)
     {
-		songProgressBar.Value = musicManager.songTime;
+		songProgressBar.Value = MusicManager.Instance.songTime;
 
-        int seconds = (int)(musicManager.songTime / 1000f);
+        int seconds = (int)(MusicManager.Instance.songTime / 1000f);
         int minutes = seconds / 60;
 		seconds %= 60;
 
-		if (musicManager.songTime < 0) {
+		if (MusicManager.Instance.songTime < 0) {
 			songProgressLabel.Text = $"-{minutes:00}:{-seconds:00}";
 		} else {
 			songProgressLabel.Text = $"{minutes:00}:{seconds:00}";
 		}
 
-		int remaining = Math.Max(chartManager.chartLength - musicManager.songTime, 0);
+		int remaining = Math.Max(chartManager.chartLength - MusicManager.Instance.songTime, 0);
 		seconds = (int)(remaining / 1000f);
         minutes = seconds / 60;
 		seconds %= 60;

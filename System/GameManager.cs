@@ -1,5 +1,5 @@
 using Godot;
-using System;
+using System.IO;
 
 public partial class GameManager : Node
 {
@@ -7,7 +7,6 @@ public partial class GameManager : Node
 	public Playfield playfield;
 	public ChartManager chartManager;
 	public InputManager inputManager;
-	public MusicManager musicManager;
 	public GameUIManager uiManager;
 
 	QuaChart chartData;
@@ -24,26 +23,19 @@ public partial class GameManager : Node
 	public override void _Ready()
 	{
 		Parser parser = new();
-		chartData = parser.ParseQua(ProjectSettings.GlobalizePath(DataManager.Instance.SelectedSongFolderPath), DataManager.Instance.SelectedChartId);
+		chartData = parser.ParseQuaChart(DataManager.Instance.MapPath);
 
-		playfield = GetNode<Playfield>("Playfield");
-		chartManager = GetNode<ChartManager>("ChartManager");
-		inputManager = GetNode<InputManager>("InputManager");
-		musicManager = GetNode<MusicManager>("MusicManager");
-		uiManager = GetNode<GameUIManager>("UI");
-
-		playfield.Initialise(this);
-		musicManager.Initialise();
-		inputManager.Initialise(playfield.noteManager, playfield.hitField);
-		chartManager.Initialise(musicManager, playfield.noteManager, playfield.hitField, chartData);
-		uiManager.Initialise(musicManager, chartManager);
+		InitialiseManagers();
 
 		uiManager.SetSongDetails(chartData.SongTitle, chartData.Artist, chartData.Creator);
 
 		playfield.noteManager.NoteJudged += ProcessNote;
 
-		Engine.MaxFps = 240;
+		SetBackground();
+
+		Engine.MaxFps = DataManager.GameplaySettings.maxFps;
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
+		Input.MouseMode = Input.MouseModeEnum.Captured;
 	}
 
 	void ProcessNote(int judgement, float errorTime) {
@@ -59,8 +51,21 @@ public partial class GameManager : Node
 		uiManager.SetCombo(combo);
 	}
 
-	// Called every frame. 'delta' is the elapsed time since the previous frame.
-	public override void _Process(double delta)
-	{
+	void InitialiseManagers() {
+		playfield = GetNode<Playfield>("Playfield");
+		chartManager = GetNode<ChartManager>("ChartManager");
+		inputManager = GetNode<InputManager>("InputManager");
+		uiManager = GetNode<GameUIManager>("UI");
+
+		playfield.Initialise();
+		inputManager.Initialise(playfield.noteManager, playfield.hitField);
+		chartManager.Initialise(playfield.noteManager, playfield.hitField, chartData);
+		uiManager.Initialise(chartManager);
+	}
+
+	void SetBackground() {
+		TextureRect background = GetNode("BackgroundLayer").GetNode<TextureRect>("Background");
+		background.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile(DataManager.Instance.BackgroundPath));
+		background.Modulate = new Color(Colors.White, DataManager.StyleSettings.backgroundOpacity);
 	}
 }

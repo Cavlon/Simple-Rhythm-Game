@@ -8,25 +8,23 @@ public partial class Playfield : Node2D
 
 	public NoteManager noteManager;
 	public HitField hitField;
-	public GameManager gameManager;
 
 	GameplaySettings _gameSettings;
 	StyleSettings _styleSettings;
 
 	// Called when the node enters the scene tree for the first time.
-	public void Initialise(GameManager _gameManager)
+	public void Initialise()
 	{
 		_gameSettings = DataManager.GameplaySettings;
 		_styleSettings = DataManager.StyleSettings;
-		
-		gameManager = _gameManager;
 
 		noteManager = GetNode<NoteManager>("NoteManager");
 		hitField = GetNode<HitField>("Hitfield");
 
-		noteManager.Initialise(gameManager.musicManager, hitField);
+		noteManager.Initialise(hitField);
 
 		backgroundSprite.Scale = new Vector2((float)_styleSettings.playfieldWidth / backgroundSprite.Texture.GetWidth(), 1f);
+		backgroundSprite.Modulate = new Color(Colors.White, _styleSettings.playfieldOpacity);
 
 		Vector2 viewportSize = GetViewportRect().Size;
 

@@ -15,7 +15,6 @@ script = ExtResource("1_1fk6d")
 backgroundSprite = NodePath("Background")
 
 [node name="Background" type="Sprite2D" parent="." unique_id=1832158282]
-modulate = Color(1, 1, 1, 0.29803923)
 texture = ExtResource("2_fri3p")
 
 [node name="Hitfield" parent="." unique_id=247482771 instance=ExtResource("4_i1ht5")]

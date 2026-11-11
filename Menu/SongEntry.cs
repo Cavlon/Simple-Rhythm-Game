@@ -10,8 +10,11 @@ public partial class SongEntry : TextureRect
 
 	[Export] Texture2D unselectedTexture;
 	[Export] Texture2D selectedTexture;
+	[Export] Color difficultyColour;
 
 	RichTextLabel titleLabel;
+	RichTextLabel difficultyLabel;
+	TextureRect textureRect;
 
 	Tween selectedTween;
 	Tween hoverTween;
@@ -22,6 +25,8 @@ public partial class SongEntry : TextureRect
 	public override void _Ready()
 	{
 		titleLabel = GetNode<RichTextLabel>("SongTitle");
+		difficultyLabel = GetNode<RichTextLabel>("Difficulty");
+		textureRect = GetNode<TextureRect>("TextureRect");
 		Texture = unselectedTexture;
 
 		MouseEntered += OnHover;
@@ -41,9 +46,11 @@ public partial class SongEntry : TextureRect
         }
     }
 
-	public void SetId(int _id) {
+	public void SetData(int _id, QuaMapset mapset, int mapInd, Texture2D texture) {
 		id = _id;
-		titleLabel.Text = id.ToString();
+		titleLabel.Text = $"{mapset.Artist} - {mapset.SongTitle}";
+		difficultyLabel.Text = $"[color=#{difficultyColour.ToHtml(false)}]{mapset.Difficulties[mapInd]}[/color] | By: {mapset.Creator}";
+		textureRect.Texture = texture;
 	}
 
 	public void Selected(bool tween = true) {

@@ -11,13 +11,15 @@ config_version=5
 [application]
 
 config/name="Maximum Tempo"
-run/main_scene="uid://ddofev7yran3h"
+run/main_scene="uid://t4uum6j461y2"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
 DataManager="*uid://d3hf54c5eoou"
+SceneManager="*uid://3qtycm6xu6wa"
+MusicManager="*uid://5b4ppkednjxf"
 
 [display]
 

@@ -5,6 +5,7 @@
 [resource]
 script = ExtResource("1_pg0o0")
 playfieldWidth = 300
+playfieldOpacity = 0.9
 receptorScale = 1.1
 judgementPosY = -120.0
 comboPosY = 120.0

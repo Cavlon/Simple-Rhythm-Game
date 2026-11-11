@@ -1,15 +1,20 @@
 using Godot;
 using System;
+using System.Collections.Generic;
 
 public partial class SongList : Control
 {
 	[Export] float spacing = 0f;
-	[Export] int entryCount = 1;
 	[Export] float scrollTickAmount = 10;
 	[Export] float maxScrollSpeed = 100f;
 
-	SongEntry songEntryTemplate;
+	List<QuaMapset> mapsets;
+	int[] mapsetInds;
 
+	SongEntry songEntryTemplate;
+	SongSelect songSelect;
+
+	int entryCount = 0;
 	float entryHeight;
 	float entrySpace;
 	SongEntry[] entryPool;
@@ -18,7 +23,7 @@ public partial class SongList : Control
 	float bottomPos;
 	float scroll = 0;
 	float targetScroll = 0;
-	int selectedInd = 0;
+	int selectedInd = -1;
 
 	float holdTimer = 0.4f;
 	bool holdDown = false;
@@ -26,8 +31,21 @@ public partial class SongList : Control
 	bool dragging = false;
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public void Initialise(SongSelect _songSelect)
 	{
+		songSelect = _songSelect;
+
+		Parser parser = new();
+		mapsets = parser.ParseAllMapsets(DataManager.Instance.SongsFolder);
+
+		mapsetInds = new int[mapsets.Count];
+
+		entryCount = 0;
+		for (int i = 0; i < mapsets.Count; i++) {
+			mapsetInds[i] = entryCount;
+			entryCount += mapsets[i].MapCount;
+		}
+
 		songEntryTemplate = GetNode<SongEntry>("SongEntry");
 		songEntryTemplate.AnchorRight = 1f;
 		songEntryTemplate.Position = new Vector2(30f, 0f);
@@ -35,15 +53,13 @@ public partial class SongList : Control
 		entryHeight = songEntryTemplate.Size.Y;
 		entrySpace = entryHeight + spacing;
 
-		entryPool = new SongEntry[(int)(Size.Y / entrySpace) + 2];
+		entryPool = new SongEntry[(int)(Size.Y / entrySpace) + 3];
 		entryPool[0] = songEntryTemplate;
 		UpdateEntry(0);
 		songEntryTemplate.Clicked += UpdateSelection;
 
 		if (entryCount == 0) {
 			songEntryTemplate.Visible = false;
-		} else {
-			songEntryTemplate.Selected();
 		}
 
 		for (int i = 1; i < entryPool.Length; i++) {
@@ -66,6 +82,9 @@ public partial class SongList : Control
 		UpdateBottom();
 
 		UpdateList();
+
+		Random r = new();
+		UpdateSelection(r.Next(entryCount));
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -179,6 +198,10 @@ public partial class SongList : Control
 			holdUp = false;
 			holdTimer = 0.4f;
 		}
+
+		if (@event.IsActionPressed("ui_accept")) {
+			UpdateSelection(selectedInd);
+		}
     }
 
 	void UpdateBottom() {
@@ -223,7 +246,12 @@ public partial class SongList : Control
 
 	void UpdateEntry(int listIndex) {
 		SongEntry entry = entryPool[listIndex % entryPool.Length];
-		entry.SetId(listIndex);
+
+		(int mapsetInd, int mapInd) = FindMapsetIndices(listIndex);
+
+		Texture2D texture = songSelect.GetBackground(DataManager.Instance.SongsFolder.PathJoin(mapsets[mapsetInd].MapSetId.ToString()).PathJoin(mapsets[mapsetInd].BackgroundFile), mapsets[mapsetInd].MapSetId);
+		entry.SetData(listIndex, mapsets[mapsetInd], mapInd, texture);
+
 		if (listIndex == selectedInd) {
 			entry.Selected(false);
 		} else {
@@ -234,7 +262,11 @@ public partial class SongList : Control
 	void UpdateSelection(int newSelectInd) {
 		if (newSelectInd < 0 || newSelectInd >= entryCount) return;
 
-		entryPool[selectedInd % entryPool.Length].UnSelected();
+		if (newSelectInd == selectedInd) {
+			SceneManager.Instance.ChangeScene(SceneManager.Scene.Game);
+		}
+
+		if (selectedInd > -1 && selectedInd < entryCount) entryPool[selectedInd % entryPool.Length].UnSelected();
 		selectedInd = newSelectInd;
 
 		float selectedPos = selectedInd * entrySpace + entryHeight / 2f;
@@ -245,10 +277,29 @@ public partial class SongList : Control
 
 		UpdateList();
 
+		(int mapsetInd, int mapInd) = FindMapsetIndices(selectedInd);
+		QuaMapset mapset = mapsets[mapsetInd];
+
+		DataManager.Instance.UpdateMapset(mapset.MapSetId);
+		DataManager.Instance.UpdateMap(mapset.MapIds[mapInd]);
+		DataManager.Instance.UpdateMapAssets(mapset.BackgroundFile, mapset.AudioFile);
+		songSelect.UpdateMapAssets(mapset.SongPreviewTime);
+
 		if (selectedInd >= startInd && selectedInd < startInd + entryPool.Length) entryPool[selectedInd % entryPool.Length].Selected();
 	}
 
 	void InterpolateScroll(double delta) {
 		scroll += Mathf.Clamp((targetScroll - scroll) * (float)delta * 10f, -maxScrollSpeed, maxScrollSpeed);
+	}
+
+	(int, int) FindMapsetIndices(int globalIndex) {
+		int mapsetInd = Array.BinarySearch(mapsetInds, globalIndex);
+
+		if (mapsetInd < 0) {
+			// If an exact match isn't found binary search returns the bitwise complement of the next largest element
+			mapsetInd = ~mapsetInd - 1;
+		}
+
+		return (mapsetInd, globalIndex - mapsetInds[mapsetInd]);
 	}
 }

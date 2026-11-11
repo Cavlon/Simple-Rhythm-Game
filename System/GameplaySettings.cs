@@ -17,6 +17,9 @@ public partial class GameplaySettings : Resource
     [Export] public float greatWindow = 76f;
     [Export] public float missWindow = 164f;
 
+    [ExportGroup("Process")]
+    [Export] public int maxFps = 240;
+
     [ExportGroup("Debug")]
     [Export] public bool displayHitfield = false;
 }

@@ -4,11 +4,31 @@
 [ext_resource type="PackedScene" uid="uid://by35pknqrwcyj" path="res://Gameplay/playfield.tscn" id="2_evi6s"]
 [ext_resource type="Script" uid="uid://ch0c5qv2p8dbt" path="res://System/ChartManager.cs" id="3_3cnyo"]
 [ext_resource type="Script" uid="uid://bifglats1pj6y" path="res://System/InputManager.cs" id="4_20gy4"]
-[ext_resource type="Script" uid="uid://5b4ppkednjxf" path="res://System/MusicManager.cs" id="5_at3nd"]
 [ext_resource type="PackedScene" uid="uid://xk1p305njt3i" path="res://Gameplay/ui.tscn" id="6_8deg3"]
 
 [node name="GameManager" type="Node" unique_id=264320428]
 script = ExtResource("1_c4nfj")
+metadata/_edit_horizontal_guides_ = [-473.0]
+
+[node name="BackgroundLayer" type="CanvasLayer" parent="." unique_id=1910193018]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="BackgroundLayer" unique_id=406034869]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Background" type="TextureRect" parent="BackgroundLayer" unique_id=1181325932]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1315430213]
 
@@ -19,8 +39,5 @@ script = ExtResource("3_3cnyo")
 
 [node name="InputManager" type="Node" parent="." unique_id=1077420347]
 script = ExtResource("4_20gy4")
-
-[node name="MusicManager" type="AudioStreamPlayer2D" parent="." unique_id=777670653]
-script = ExtResource("5_at3nd")
 
 [node name="UI" parent="." unique_id=1403210348 instance=ExtResource("6_8deg3")]

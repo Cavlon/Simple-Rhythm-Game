@@ -11,7 +11,6 @@ public partial class NoteManager : Node2D
 
 	GameplaySettings _gameSettings;
 	StyleSettings _styleSettings;
-	MusicManager musicManager;
 
 	int scrollSpeed;
 
@@ -28,13 +27,12 @@ public partial class NoteManager : Node2D
 	[Signal]
     public delegate void NoteJudgedEventHandler(int judgement, float errorTime);
 
-	public void Initialise(MusicManager _musicManager, HitField _hitfield)
+	public void Initialise(HitField _hitfield)
 	{
 		_gameSettings = DataManager.GameplaySettings;
 		_styleSettings = DataManager.StyleSettings;
 
 		scrollSpeed = _gameSettings.scrollSpeed;
-		musicManager = _musicManager;
 		hitField = _hitfield;
 
 		int paddedWidth = _styleSettings.playfieldWidth - _styleSettings.playfieldPadding * 2;
@@ -113,7 +111,7 @@ public partial class NoteManager : Node2D
 		(int, int) activeNote = activeNotes[lane].Peek();
 		Note note = notePool[activeNote.Item1];
 
-		float dist = Math.Abs(musicManager.songTime - activeNote.Item2);
+		float dist = Math.Abs(MusicManager.Instance.songTime - activeNote.Item2);
 
 		for (int i = 0; i < 4; i++) {
 			if (dist < judgements[i]) {
