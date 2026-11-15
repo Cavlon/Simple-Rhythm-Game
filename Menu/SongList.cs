@@ -10,6 +10,7 @@ public partial class SongList : Control
 
 	List<QuaMapset> mapsets;
 	int[] mapsetInds;
+	(int, int) selectedMapInds;
 
 	SongEntry songEntryTemplate;
 	SongSelect songSelect;
@@ -249,7 +250,7 @@ public partial class SongList : Control
 
 		(int mapsetInd, int mapInd) = FindMapsetIndices(listIndex);
 
-		Texture2D texture = songSelect.GetBackground(DataManager.Instance.SongsFolder.PathJoin(mapsets[mapsetInd].MapSetId.ToString()).PathJoin(mapsets[mapsetInd].BackgroundFile), mapsets[mapsetInd].MapSetId);
+		Texture2D texture = songSelect.GetBackground(mapsets[mapsetInd].MapSetId.ToString().PathJoin(mapsets[mapsetInd].mapDetails[mapInd].BackgroundFile));
 		entry.SetData(listIndex, mapsets[mapsetInd], mapInd, texture);
 
 		if (listIndex == selectedInd) {
@@ -263,7 +264,8 @@ public partial class SongList : Control
 		if (newSelectInd < 0 || newSelectInd >= entryCount) return;
 
 		if (newSelectInd == selectedInd) {
-			SceneManager.Instance.ChangeScene(SceneManager.Scene.Game);
+			QuaMapset selectedMapset = mapsets[selectedMapInds.Item1];
+            SceneManager.ChangeScene(SceneManager.Scene.Game, 1.5f, $"{selectedMapset.Artist} - {selectedMapset.SongTitle}", $"By: {selectedMapset.Creator}");
 		}
 
 		if (selectedInd > -1 && selectedInd < entryCount) entryPool[selectedInd % entryPool.Length].UnSelected();
@@ -277,19 +279,30 @@ public partial class SongList : Control
 
 		UpdateList();
 
-		(int mapsetInd, int mapInd) = FindMapsetIndices(selectedInd);
+		selectedMapInds = FindMapsetIndices(selectedInd);
+		(int mapsetInd, int mapInd) = selectedMapInds;
 		QuaMapset mapset = mapsets[mapsetInd];
 
 		DataManager.Instance.UpdateMapset(mapset.MapSetId);
-		DataManager.Instance.UpdateMap(mapset.MapIds[mapInd]);
-		DataManager.Instance.UpdateMapAssets(mapset.BackgroundFile, mapset.AudioFile);
+		DataManager.Instance.UpdateMap(mapset.mapDetails[mapInd].MapId);
+		DataManager.Instance.UpdateMapAssets(mapset.mapDetails[mapInd].BackgroundFile, mapset.AudioFile);
 		songSelect.UpdateMapAssets(mapset.SongPreviewTime);
 
 		if (selectedInd >= startInd && selectedInd < startInd + entryPool.Length) entryPool[selectedInd % entryPool.Length].Selected();
 	}
 
 	void InterpolateScroll(double delta) {
-		scroll += Mathf.Clamp((targetScroll - scroll) * (float)delta * 10f, -maxScrollSpeed, maxScrollSpeed);
+		float dist = targetScroll - scroll;
+		float scrollSpeed = dist * (float)delta * 10f;
+		if (dist < 0) {
+			scrollSpeed = Math.Max(scrollSpeed, dist);
+			scrollSpeed = Math.Max(scrollSpeed, -maxScrollSpeed);
+		} else {
+			scrollSpeed = Math.Min(scrollSpeed, dist);
+			scrollSpeed = Math.Min(scrollSpeed, maxScrollSpeed);
+		}
+
+		scroll += scrollSpeed;
 	}
 
 	(int, int) FindMapsetIndices(int globalIndex) {

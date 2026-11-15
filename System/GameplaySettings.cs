@@ -20,6 +20,9 @@ public partial class GameplaySettings : Resource
     [ExportGroup("Process")]
     [Export] public int maxFps = 240;
 
+    [ExportGroup("Misc.")]
+    [Export] public int startTime = 2000;
+
     [ExportGroup("Debug")]
     [Export] public bool displayHitfield = false;
 }

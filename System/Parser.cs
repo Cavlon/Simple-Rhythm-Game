@@ -28,6 +28,9 @@ public class QuaDetails
 
     [YamlMember(Alias = "DifficultyName")]
     public string DifficultyName { get; set; }
+
+    [YamlMember(Alias = "BackgroundFile")]
+    public string BackgroundFile { get; set; }
 }
 
 public class QuaMapset
@@ -47,15 +50,11 @@ public class QuaMapset
     [YamlMember(Alias = "SongPreviewTime")]
     public int SongPreviewTime { get; set; }
 
-    [YamlMember(Alias = "BackgroundFile")]
-    public string BackgroundFile { get; set; }
-
     [YamlMember(Alias = "AudioFile")]
     public string AudioFile { get; set; }
 
     public int MapCount = 0;
-    public int[] MapIds;
-    public string[] Difficulties;
+    public QuaDetails[] mapDetails;
 }
 
 public class QuaNote
@@ -110,14 +109,12 @@ public partial class Parser
 
             if (mapset is null) {
                 mapset = deserializer.Deserialize<QuaMapset>(quaFile);
-                mapset.MapIds = new int[quaFiles.Length];
-                mapset.Difficulties = new string[quaFiles.Length];
+                mapset.mapDetails = new QuaDetails[quaFiles.Length];
             }
             
             QuaDetails map = deserializer.Deserialize<QuaDetails>(quaFile);
 
-            mapset.MapIds[i] = map.MapId;
-            mapset.Difficulties[i] = map.DifficultyName;
+            mapset.mapDetails[i] = map;
             mapset.MapCount++;
         }
 

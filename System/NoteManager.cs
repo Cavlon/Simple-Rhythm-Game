@@ -111,7 +111,8 @@ public partial class NoteManager : Node2D
 		(int, int) activeNote = activeNotes[lane].Peek();
 		Note note = notePool[activeNote.Item1];
 
-		float dist = Math.Abs(MusicManager.Instance.songTime - activeNote.Item2);
+		int error = MusicManager.Instance.songTime - activeNote.Item2;
+		int dist = Math.Abs(error);
 
 		for (int i = 0; i < 4; i++) {
 			if (dist < judgements[i]) {

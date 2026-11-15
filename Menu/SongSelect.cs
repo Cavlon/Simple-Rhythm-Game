@@ -5,6 +5,8 @@ using System.Collections.Generic;
 public partial class SongSelect : CanvasLayer
 {
 
+	[Export] int cacheLimit = 20;
+
 	SongList songList;
 
 	TextureRect background;
@@ -12,7 +14,8 @@ public partial class SongSelect : CanvasLayer
 	string backgroundPath = "";
 	string audioPath = "";
 
-	Dictionary<int, Texture2D> imageCache = [];
+	Dictionary<string, Texture2D> imageCache = [];
+	LinkedList<string> textureHistory = [];
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -25,12 +28,15 @@ public partial class SongSelect : CanvasLayer
 		songList.Initialise(this);
 	}
 
-	public Texture2D GetBackground(string backgroundPath, int mapsetId) {
-		if (imageCache.TryGetValue(mapsetId, out var cachedTexture))
+	// ADD LAZY LOADING WITH BACKGROUND THREADS
+	public Texture2D GetBackground(string backgroundPath) {
+		if (imageCache.TryGetValue(backgroundPath, out var cachedTexture))
         {
+			textureHistory.Remove(backgroundPath);
+        	textureHistory.AddFirst(backgroundPath);
             return cachedTexture;
         } else {
-			Image img = Image.LoadFromFile(backgroundPath);
+			Image img = Image.LoadFromFile(DataManager.Instance.SongsFolder.PathJoin(backgroundPath));
 
 			int maxWidth = ProjectSettings.GetSetting("display/window/size/viewport_width").AsInt32();
 			int maxHeight = ProjectSettings.GetSetting("display/window/size/viewport_height").AsInt32();
@@ -49,8 +55,19 @@ public partial class SongSelect : CanvasLayer
 				img.Resize(newWidth, newHeight, Image.Interpolation.Lanczos);
 			}
 
+			if (textureHistory.Count >= cacheLimit) {
+				LinkedListNode<string> oldestNode = textureHistory.Last;
+				GD.Print($"Removing {oldestNode.Value}");
+				imageCache.Remove(oldestNode.Value);
+				textureHistory.RemoveLast();
+			}
+
+			GD.Print($"Adding {backgroundPath}");
+
 			Texture2D texture = ImageTexture.CreateFromImage(img);
-			imageCache[mapsetId] = texture;
+			LinkedListNode<string> newNode = new(backgroundPath);
+			textureHistory.AddFirst(newNode);
+			imageCache[backgroundPath] = texture;
 			return texture;
 		}
 	}
@@ -58,10 +75,12 @@ public partial class SongSelect : CanvasLayer
 	public void UpdateMapAssets(int songStart) {
 		if (backgroundPath == DataManager.Instance.BackgroundPath) return;
 
-		background.Texture = GetBackground(DataManager.Instance.BackgroundPath, DataManager.Instance.MapsetId);
+		DataManager.Instance.backgroundTexture = GetBackground(DataManager.Instance.BackgroundPath);
+		background.Texture = DataManager.Instance.backgroundTexture;
 		backgroundPath = DataManager.Instance.BackgroundPath;
 
 		if (audioPath == DataManager.Instance.AudioPath) return;
 		MusicManager.Instance.StartAudio(songStart);
+		audioPath = DataManager.Instance.AudioPath;
 	}
 }

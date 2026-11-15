@@ -49,7 +49,7 @@ public partial class SongEntry : TextureRect
 	public void SetData(int _id, QuaMapset mapset, int mapInd, Texture2D texture) {
 		id = _id;
 		titleLabel.Text = $"{mapset.Artist} - {mapset.SongTitle}";
-		difficultyLabel.Text = $"[color=#{difficultyColour.ToHtml(false)}]{mapset.Difficulties[mapInd]}[/color] | By: {mapset.Creator}";
+		difficultyLabel.Text = $"[color=#{difficultyColour.ToHtml(false)}]{mapset.mapDetails[mapInd].DifficultyName}[/color] | By: {mapset.Creator}";
 		textureRect.Texture = texture;
 	}
 

@@ -28,7 +28,7 @@ public partial class ChartManager : Node
 		chart = _chart;
 
 		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _gameSettings.scrollSpeed);
-		MusicManager.Instance.StartAudio(-lookAhead-1000);
+		MusicManager.Instance.StartAudio(-lookAhead-_gameSettings.startTime);
 
 		chartLength = chart.HitObjects[^1].StartTime;
 	}
@@ -36,7 +36,7 @@ public partial class ChartManager : Node
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
-		if (notePointer < chart.HitObjects.Count && MusicManager.Instance.songTime + lookAhead > chart.HitObjects[notePointer].StartTime) {
+		if (notePointer < chart.HitObjects.Count && MusicManager.Instance.songTime + lookAhead >= chart.HitObjects[notePointer].StartTime) {
 			noteManager.SpawnNote(chart.HitObjects[notePointer].Lane-1, chart.HitObjects[notePointer].StartTime);
 			notePointer++;
 		}

@@ -105,7 +105,7 @@ public partial class GameUIManager : CanvasLayer
 	public void SetSongDetails(string title, string artist, string charter) {
 		songTitleLabel.Text = title;
 		songArtistLabel.Text = artist;
-	 	charterLabel.Text = $"Chart: {charter}";
+	 	charterLabel.Text = $"By: {charter}";
 	}
 
     public override void _Process(double delta)

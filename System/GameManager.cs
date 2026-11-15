@@ -65,7 +65,7 @@ public partial class GameManager : Node
 
 	void SetBackground() {
 		TextureRect background = GetNode("BackgroundLayer").GetNode<TextureRect>("Background");
-		background.Texture = ImageTexture.CreateFromImage(Image.LoadFromFile(DataManager.Instance.BackgroundPath));
+		background.Texture = DataManager.Instance.backgroundTexture;
 		background.Modulate = new Color(Colors.White, DataManager.StyleSettings.backgroundOpacity);
 	}
 }

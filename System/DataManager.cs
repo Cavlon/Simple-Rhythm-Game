@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using Godot;
 
 public partial class DataManager : Node
@@ -11,7 +12,10 @@ public partial class DataManager : Node
     public string MapPath;
     public string BackgroundPath;
     public string AudioPath;
+
     public int MapsetId;
+
+    public Texture2D backgroundTexture;
 
     public override void _Ready()
     {
@@ -35,7 +39,7 @@ public partial class DataManager : Node
     }
 
     public void UpdateMapAssets(string backgroundFile, string audioFile) {
-        BackgroundPath = MapsetPath.PathJoin(backgroundFile);
+        BackgroundPath = MapsetId.ToString().PathJoin(backgroundFile);
         AudioPath = MapsetPath.PathJoin(audioFile);
     }
 }

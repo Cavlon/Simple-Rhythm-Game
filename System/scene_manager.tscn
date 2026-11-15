@@ -2,7 +2,114 @@
 
 [ext_resource type="Script" uid="uid://cdmqco1y14d8g" path="res://System/SceneManager.cs" id="1_awcvy"]
 [ext_resource type="PackedScene" uid="uid://ddofev7yran3h" path="res://Gameplay/game.tscn" id="2_i4ya2"]
+[ext_resource type="Theme" uid="uid://dkqf73l6hqg84" path="res://Assets/Themes/default_theme.tres" id="3_efmy2"]
+[ext_resource type="Shader" uid="uid://bc6bdpflajcmf" path="res://External/transition.gdshader" id="4_pgk2r"]
 
-[node name="SceneManager" type="Node" unique_id=2106189157]
+[sub_resource type="ViewportTexture" id="ViewportTexture_gl68d"]
+viewport_path = NodePath("CanvasLayer/SubViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0ae4s"]
+shader = ExtResource("4_pgk2r")
+shader_parameter/use_sprite_alpha = true
+shader_parameter/use_transition_texture = false
+shader_parameter/transition_type = 0
+shader_parameter/position = Vector2(0.5, 0.5)
+shader_parameter/invert = true
+shader_parameter/grid_size = Vector2(1, 1)
+shader_parameter/rotation_angle = 45.0
+shader_parameter/global_x_mirror = false
+shader_parameter/global_y_mirror = false
+shader_parameter/local_x_mirror = false
+shader_parameter/local_y_mirror = false
+shader_parameter/stagger = Vector2(0, 0)
+shader_parameter/cumulative_stagger_flip = false
+shader_parameter/cumulative_stagger = Vector2(0, 0)
+shader_parameter/stagger_frequency = Vector2i(2, 2)
+shader_parameter/flip_frequency = Vector2i(1, 1)
+shader_parameter/basic_feather = 0.0
+shader_parameter/use_mask_size = false
+shader_parameter/mask_size = Vector2(100, 100)
+shader_parameter/edges = 6
+shader_parameter/shape_feather = 0.1
+shader_parameter/sectors = 1
+shader_parameter/clock_feather = 0.0
+shader_parameter/progress = 0.0
+shader_parameter/progress_bias = Vector2(0, 0)
+
+[node name="SceneManager" type="Node" unique_id=2106189157 node_paths=PackedStringArray("mainLabel", "subLabel", "shaderRect")]
 script = ExtResource("1_awcvy")
 gameScene = ExtResource("2_i4ya2")
+mainLabel = NodePath("CanvasLayer/TextureRect/CenterContainer/VBoxContainer/MainLabel")
+subLabel = NodePath("CanvasLayer/TextureRect/CenterContainer/VBoxContainer/SubLabel")
+shaderRect = NodePath("CanvasLayer/SubViewport/ColorRect")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=204152641]
+layer = 10
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer" unique_id=1001671429]
+clip_children = 2
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = SubResource("ViewportTexture_gl68d")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/TextureRect" unique_id=881874452]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -173.0
+offset_top = -33.0
+offset_right = 173.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TextureRect/CenterContainer" unique_id=956266722]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="MainLabel" type="RichTextLabel" parent="CanvasLayer/TextureRect/CenterContainer/VBoxContainer" unique_id=384028505]
+layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 2
+theme = ExtResource("3_efmy2")
+text = "HyuN - Princess of Winter"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="SubLabel" type="RichTextLabel" parent="CanvasLayer/TextureRect/CenterContainer/VBoxContainer" unique_id=362532005]
+layout_mode = 2
+offset_transform_enabled = true
+mouse_filter = 2
+theme = ExtResource("3_efmy2")
+theme_override_colors/default_color = Color(0.89411765, 0.7019608, 0.24313726, 1)
+theme_override_font_sizes/normal_font_size = 20
+text = "By: PianoLuigi"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+
+[node name="SubViewport" type="SubViewport" parent="CanvasLayer" unique_id=689773617]
+transparent_bg = true
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/SubViewport" unique_id=374474410]
+clip_children = 2
+material = SubResource("ShaderMaterial_0ae4s")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.15686275, 0.15686275, 0.15686275, 1)
