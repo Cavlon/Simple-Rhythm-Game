@@ -36,6 +36,8 @@ public partial class GameManager : Node
 		Engine.MaxFps = DataManager.GameplaySettings.maxFps;
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
 		Input.MouseMode = Input.MouseModeEnum.Captured;
+
+		MusicManager.Instance.StopAudio();
 	}
 
 	void ProcessNote(int judgement, float errorTime) {

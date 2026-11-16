@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Threading.Tasks;
 
 public partial class SongEntry : TextureRect
 {
@@ -20,6 +21,8 @@ public partial class SongEntry : TextureRect
 	Tween hoverTween;
 
 	Vector2 initialClickPos = Vector2.Up;
+
+	string backgroundPath;
 
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
@@ -46,11 +49,22 @@ public partial class SongEntry : TextureRect
         }
     }
 
-	public void SetData(int _id, QuaMapset mapset, int mapInd, Texture2D texture) {
+	public void SetData(int _id, QuaMapset mapset, int mapInd) {
 		id = _id;
 		titleLabel.Text = $"{mapset.Artist} - {mapset.SongTitle}";
 		difficultyLabel.Text = $"[color=#{difficultyColour.ToHtml(false)}]{mapset.mapDetails[mapInd].DifficultyName}[/color] | By: {mapset.Creator}";
-		textureRect.Texture = texture;
+	}
+
+	public async Task SetImage(string path = "") {
+		if (path == "") {
+			textureRect.Texture = null;
+			return;
+		}
+
+		backgroundPath = path;
+
+		Texture2D texture = await ImageHandler.GetCachedImage(path);
+		if (path == backgroundPath) textureRect.Texture = texture;
 	}
 
 	public void Selected(bool tween = true) {

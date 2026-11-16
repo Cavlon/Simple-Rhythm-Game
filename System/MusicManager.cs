@@ -1,5 +1,7 @@
 using Godot;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 public partial class MusicManager : AudioStreamPlayer2D
 {
@@ -37,8 +39,23 @@ public partial class MusicManager : AudioStreamPlayer2D
 		}
 	}
 
-	public void StartAudio(int startTime) {
-		Stream = (AudioStream)GD.Load(DataManager.Instance.AudioPath);
+	public async Task StartAudio(int startTime, CancellationToken token = default) {
+		// Debounce
+		await Task.Delay(100, token);
+
+		AudioStreamMP3 stream = await Task.Run(() => {
+			return AudioStreamMP3.LoadFromFile(DataManager.Instance.AudioPath);
+		}, token);
+
+		if (token.IsCancellationRequested) {
+			stream.Dispose();
+			return;
+		}
+
+		Stop();
+    	Stream?.Dispose();
+
+		Stream = stream;
 		songTime = startTime;
 		audioPlaying = false;
 
@@ -48,5 +65,12 @@ public partial class MusicManager : AudioStreamPlayer2D
 		}
 
 		songPlaying = true;
+	}
+
+	public void StopAudio() {
+		Stop();
+		songTime = -10000;
+		audioPlaying = false;
+		songPlaying = false;
 	}
 }

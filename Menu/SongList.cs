@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public partial class SongList : Control
 {
@@ -249,15 +250,16 @@ public partial class SongList : Control
 		SongEntry entry = entryPool[listIndex % entryPool.Length];
 
 		(int mapsetInd, int mapInd) = FindMapsetIndices(listIndex);
-
-		Texture2D texture = songSelect.GetBackground(mapsets[mapsetInd].MapSetId.ToString().PathJoin(mapsets[mapsetInd].mapDetails[mapInd].BackgroundFile));
-		entry.SetData(listIndex, mapsets[mapsetInd], mapInd, texture);
+		entry.SetData(listIndex, mapsets[mapsetInd], mapInd);
+		_ = entry.SetImage();
 
 		if (listIndex == selectedInd) {
 			entry.Selected(false);
 		} else {
 			entry.UnSelected(false);
 		}
+
+		_ = entry.SetImage(mapsets[mapsetInd].MapSetId.ToString().PathJoin(mapsets[mapsetInd].mapDetails[mapInd].BackgroundFile));
 	}
 
 	void UpdateSelection(int newSelectInd) {

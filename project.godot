@@ -23,6 +23,7 @@ MusicManager="*uid://5b4ppkednjxf"
 
 [display]
 
+window/size/mode=3
 window/size/resizable=false
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
@@ -30,6 +31,12 @@ window/stretch/aspect="expand"
 [dotnet]
 
 project/assembly_name="Maximum Tempo"
+
+[importer_defaults]
+
+texture={
+&"compress/mode": 2
+}
 
 [input]
 

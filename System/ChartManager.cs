@@ -28,7 +28,7 @@ public partial class ChartManager : Node
 		chart = _chart;
 
 		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _gameSettings.scrollSpeed);
-		MusicManager.Instance.StartAudio(-lookAhead-_gameSettings.startTime);
+		_ = MusicManager.Instance.StartAudio(-lookAhead-_gameSettings.startTime);
 
 		chartLength = chart.HitObjects[^1].StartTime;
 	}

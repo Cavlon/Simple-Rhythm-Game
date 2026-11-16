@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using Godot;
 using YamlDotNet.Serialization;
 
@@ -25,6 +26,9 @@ public class QuaDetails
 {
     [YamlMember(Alias = "MapId")]
     public int MapId { get; set; }
+
+    [YamlMember(Alias = "Mode")]
+    public string Mode { get; set; }
 
     [YamlMember(Alias = "DifficultyName")]
     public string DifficultyName { get; set; }
@@ -106,13 +110,14 @@ public partial class Parser
             GD.Print($"Found file: {quaFiles[i]}");
 
             string quaFile = File.ReadAllText(quaFiles[i]);
+            QuaDetails map = deserializer.Deserialize<QuaDetails>(quaFile);
+
+            if (map.Mode != "Keys4") continue;
 
             if (mapset is null) {
                 mapset = deserializer.Deserialize<QuaMapset>(quaFile);
                 mapset.mapDetails = new QuaDetails[quaFiles.Length];
             }
-            
-            QuaDetails map = deserializer.Deserialize<QuaDetails>(quaFile);
 
             mapset.mapDetails[i] = map;
             mapset.MapCount++;
