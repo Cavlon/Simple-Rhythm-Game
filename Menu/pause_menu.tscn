@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://bkde4l1b7u5xc"]
+
+[ext_resource type="Script" uid="uid://d1psm8x3g64gc" path="res://Menu/PauseMenu.cs" id="1_ojlxv"]
+[ext_resource type="Texture2D" uid="uid://kjw4yr5plcpr" path="res://Assets/Skin/Pause/pause-background.png" id="1_vfjye"]
+[ext_resource type="Theme" uid="uid://dkqf73l6hqg84" path="res://Assets/Themes/default_theme.tres" id="3_vfjye"]
+[ext_resource type="Script" uid="uid://byehupsdot8n1" path="res://Menu/MenuItem.cs" id="4_vfjye"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1572013126]
+process_mode = 3
+layer = 2
+script = ExtResource("1_ojlxv")
+
+[node name="Control" type="Control" parent="." unique_id=596597592]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BG" type="TextureRect" parent="Control" unique_id=570641258]
+modulate = Color(1, 1, 1, 0.32156864)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_vfjye")
+expand_mode = 1
+
+[node name="Items" type="VBoxContainer" parent="Control" unique_id=524755689]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -131.0
+offset_top = -94.5
+offset_right = 131.0
+offset_bottom = 94.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 30
+alignment = 1
+
+[node name="Continue" type="RichTextLabel" parent="Control/Items" unique_id=1772447314]
+layout_mode = 2
+theme = ExtResource("3_vfjye")
+theme_override_font_sizes/normal_font_size = 35
+text = "Continue"
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("4_vfjye")
+unselectedColour = Color(1, 1, 1, 1)
+selectedColour = Color(0.89411765, 0.7019608, 0.24313726, 1)
+
+[node name="Retry" type="RichTextLabel" parent="Control/Items" unique_id=2347943]
+layout_mode = 2
+theme = ExtResource("3_vfjye")
+theme_override_font_sizes/normal_font_size = 35
+text = "Retry"
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("4_vfjye")
+unselectedColour = Color(1, 1, 1, 1)
+selectedColour = Color(0.89411765, 0.7019608, 0.24313726, 1)
+
+[node name="Return" type="RichTextLabel" parent="Control/Items" unique_id=1511620347]
+layout_mode = 2
+theme = ExtResource("3_vfjye")
+theme_override_font_sizes/normal_font_size = 35
+text = "Return"
+fit_content = true
+horizontal_alignment = 1
+script = ExtResource("4_vfjye")
+unselectedColour = Color(1, 1, 1, 1)
+selectedColour = Color(0.89411765, 0.7019608, 0.24313726, 1)

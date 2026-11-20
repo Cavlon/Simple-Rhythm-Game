@@ -4,8 +4,8 @@
 
 [resource]
 script = ExtResource("1_hxeci")
-playfieldWidth = 280
 receptorPosY = 50
 scrollSpeed = 1000
 notePoolSize = 400
+skipThresh = 2000
 metadata/_custom_type_script = "uid://qsdq4vpavup2"

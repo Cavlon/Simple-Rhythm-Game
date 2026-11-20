@@ -85,8 +85,12 @@ public partial class SongList : Control
 
 		UpdateList();
 
-		Random r = new();
-		UpdateSelection(r.Next(entryCount));
+		if (DataManager.Instance.listInd == -1) {
+			Random r = new();
+			UpdateSelection(r.Next(entryCount));
+		} else {
+			UpdateSelection(DataManager.Instance.listInd);
+		}
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -285,10 +289,11 @@ public partial class SongList : Control
 		(int mapsetInd, int mapInd) = selectedMapInds;
 		QuaMapset mapset = mapsets[mapsetInd];
 
-		DataManager.Instance.UpdateMapset(mapset.MapSetId);
+		DataManager.Instance.UpdateMapset(mapset);
 		DataManager.Instance.UpdateMap(mapset.mapDetails[mapInd].MapId);
 		DataManager.Instance.UpdateMapAssets(mapset.mapDetails[mapInd].BackgroundFile, mapset.AudioFile);
-		songSelect.UpdateMapAssets(mapset.SongPreviewTime);
+		DataManager.Instance.listInd = selectedInd;
+		songSelect.UpdateMapAssets();
 
 		if (selectedInd >= startInd && selectedInd < startInd + entryPool.Length) entryPool[selectedInd % entryPool.Length].Selected();
 	}

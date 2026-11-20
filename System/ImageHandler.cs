@@ -60,7 +60,7 @@ public static class ImageHandler
 
 			if (token.IsCancellationRequested) {
                 img.Dispose();
-                token.ThrowIfCancellationRequested();
+                return null;
             }
 
 			Vector2I imgSize = img.GetSize();

@@ -40,11 +40,11 @@ public partial class MusicManager : AudioStreamPlayer2D
 	}
 
 	public async Task StartAudio(int startTime, CancellationToken token = default) {
-		// Debounce
-		await Task.Delay(100, token);
+
+		string path = DataManager.Instance.AudioPath;
 
 		AudioStreamMP3 stream = await Task.Run(() => {
-			return AudioStreamMP3.LoadFromFile(DataManager.Instance.AudioPath);
+			return AudioStreamMP3.LoadFromFile(path);
 		}, token);
 
 		if (token.IsCancellationRequested) {
@@ -56,13 +56,9 @@ public partial class MusicManager : AudioStreamPlayer2D
     	Stream?.Dispose();
 
 		Stream = stream;
-		songTime = startTime;
 		audioPlaying = false;
 
-		if (startTime >= 0 && startTime < Stream.GetLength()*1000) {
-			Play(startTime / 1000f);
-			audioPlaying = true;
-		}
+		SeekAudio(startTime);
 
 		songPlaying = true;
 	}
@@ -72,5 +68,18 @@ public partial class MusicManager : AudioStreamPlayer2D
 		songTime = -10000;
 		audioPlaying = false;
 		songPlaying = false;
+	}
+
+	public void SeekAudio(int targetTime) {
+		songTime = targetTime;
+		
+		if (targetTime >= 0 && targetTime < Stream.GetLength()*1000) {
+			if (!audioPlaying) {
+				Play(targetTime / 1000f);
+				audioPlaying = true;
+			} else {
+				Seek(targetTime / 1000f);
+			}
+		}
 	}
 }

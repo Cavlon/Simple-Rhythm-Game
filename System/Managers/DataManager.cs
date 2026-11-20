@@ -7,13 +7,14 @@ public partial class DataManager : Node
     public static GameplaySettings GameplaySettings { get; private set; }
     public static StyleSettings StyleSettings { get; private set; }
 
+    public int listInd;
     public string SongsFolder;
     public string MapsetPath;
     public string MapPath;
     public string BackgroundPath;
     public string AudioPath;
 
-    public int MapsetId;
+    public QuaMapset Mapset;
 
     public Texture2D backgroundTexture;
 
@@ -24,14 +25,12 @@ public partial class DataManager : Node
         StyleSettings = GD.Load<StyleSettings>("res://System/StyleSettings.tres");
 
         SongsFolder = ProjectSettings.GlobalizePath("res://Assets/Songs");
-		UpdateMapset(563);
-		UpdateMap(2044);
-        UpdateMapAssets("Princess of Winter.png", "audio.mp3");
+        listInd = -1;
     }
 
-    public void UpdateMapset(int mapsetId) {
-        MapsetPath = SongsFolder.PathJoin(mapsetId.ToString());
-        MapsetId = mapsetId;
+    public void UpdateMapset(QuaMapset mapset) {
+        Mapset = mapset;
+        MapsetPath = SongsFolder.PathJoin(Mapset.MapSetId.ToString());
     }
 
     public void UpdateMap(int mapId) {
@@ -39,7 +38,7 @@ public partial class DataManager : Node
     }
 
     public void UpdateMapAssets(string backgroundFile, string audioFile) {
-        BackgroundPath = MapsetId.ToString().PathJoin(backgroundFile);
+        BackgroundPath = Mapset.MapSetId.ToString().PathJoin(backgroundFile);
         AudioPath = MapsetPath.PathJoin(audioFile);
     }
 }

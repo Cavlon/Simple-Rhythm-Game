@@ -7,7 +7,8 @@ public partial class GameManager : Node
 	public Playfield playfield;
 	public ChartManager chartManager;
 	public InputManager inputManager;
-	public GameUIManager uiManager;
+	public UIManager uiManager;
+	public PauseMenu pauseMenu;
 
 	QuaChart chartData;
 
@@ -15,6 +16,8 @@ public partial class GameManager : Node
 	int notesProcessed = 0;
 	float accuracy;
 	int combo = 0;
+
+	public bool paused;
 
 	float[] judgementAccuracies = [100f, 98.25f, 65f, 0f];
 	(string, Color)[] judgementStyles = [("Marvelous", Colors.White), ("Perfect", new Color("e4b33e")), ("Great", new Color("39CFB1")), ("Miss", new Color("FC6880"))];
@@ -35,7 +38,7 @@ public partial class GameManager : Node
 
 		Engine.MaxFps = DataManager.GameplaySettings.maxFps;
         DisplayServer.WindowSetVsyncMode(DisplayServer.VSyncMode.Disabled);
-		Input.MouseMode = Input.MouseModeEnum.Captured;
+		Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
 
 		MusicManager.Instance.StopAudio();
 	}
@@ -57,17 +60,31 @@ public partial class GameManager : Node
 		playfield = GetNode<Playfield>("Playfield");
 		chartManager = GetNode<ChartManager>("ChartManager");
 		inputManager = GetNode<InputManager>("InputManager");
-		uiManager = GetNode<GameUIManager>("UI");
+		uiManager = GetNode<UIManager>("UI");
+		pauseMenu = GetNode<PauseMenu>("PauseMenu");
 
 		playfield.Initialise();
-		inputManager.Initialise(playfield.noteManager, playfield.hitField);
-		chartManager.Initialise(playfield.noteManager, playfield.hitField, chartData);
+		inputManager.Initialise(this, pauseMenu, playfield.noteManager, playfield.hitField, chartManager);
+		chartManager.Initialise(playfield.noteManager, playfield.hitField, uiManager, chartData);
 		uiManager.Initialise(chartManager);
+		pauseMenu.Initialise(this);
 	}
 
 	void SetBackground() {
 		TextureRect background = GetNode("BackgroundLayer").GetNode<TextureRect>("Background");
 		background.Texture = DataManager.Instance.backgroundTexture;
 		background.Modulate = new Color(Colors.White, DataManager.StyleSettings.backgroundOpacity);
+	}
+
+	public void Pause() {
+		if (!pauseMenu.Visible) {
+			GetTree().Paused = true;
+			pauseMenu.MenuFade(true);
+			Input.MouseMode = Input.MouseModeEnum.Visible;
+		} else {
+			GetTree().Paused = false;
+			pauseMenu.MenuFade(false);
+			Input.MouseMode = Input.MouseModeEnum.ConfinedHidden;
+		}
 	}
 }

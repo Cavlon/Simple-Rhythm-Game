@@ -22,6 +22,7 @@ public partial class GameplaySettings : Resource
 
     [ExportGroup("Misc.")]
     [Export] public int startTime = 2000;
+    [Export] public int skipThresh = 1000;
 
     [ExportGroup("Debug")]
     [Export] public bool displayHitfield = false;

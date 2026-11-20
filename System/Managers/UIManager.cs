@@ -1,20 +1,21 @@
 using Godot;
 using System;
 
-public partial class GameUIManager : CanvasLayer
+public partial class UIManager : CanvasLayer
 {
 
-	[Export] RichTextLabel accuracyLabel;
-	[Export] RichTextLabel judgementLabel;
-	[Export] RichTextLabel comboLabel;
+	RichTextLabel accuracyLabel;
+	RichTextLabel judgementLabel;
+	RichTextLabel comboLabel;
+	RichTextLabel skipLabel;
 
-	[Export] RichTextLabel songTitleLabel;
-	[Export] RichTextLabel songArtistLabel;
-	[Export] RichTextLabel charterLabel;
+	RichTextLabel songTitleLabel;
+	RichTextLabel songArtistLabel;
+	RichTextLabel charterLabel;
 
-	[Export] RichTextLabel songProgressLabel;
-	[Export] RichTextLabel songRemainingLabel;
-	[Export] ProgressBar songProgressBar;
+	RichTextLabel songProgressLabel;
+	RichTextLabel songRemainingLabel;
+	ProgressBar songProgressBar;
 
 	StyleSettings _styleSettings;
 
@@ -23,17 +24,22 @@ public partial class GameUIManager : CanvasLayer
 	Tween judgementTween;
 	Tween comboTween;
 	Tween comboAlphaTween;
+	Tween skipTween;
 
 	public void Initialise(ChartManager _chartManager) {
 		_styleSettings = DataManager.StyleSettings;
 
 		chartManager = _chartManager;
 
+		InitialiseNodes();
+
 		songProgressBar.MaxValue = chartManager.chartLength;
 		judgementLabel.Position -= Vector2.Down * _styleSettings.judgementPosY;
 		comboLabel.Position -= Vector2.Down * _styleSettings.comboPosY;
 
 		comboLabel.AddThemeFontSizeOverride("font_size", _styleSettings.comboSize);
+
+		if (chartManager.SkipCheck()) skipLabel.Position = new Vector2(skipLabel.Position.X, 20f);
 	}
 
 	public void SetAccuracy(float accuracy) {
@@ -108,6 +114,18 @@ public partial class GameUIManager : CanvasLayer
 	 	charterLabel.Text = $"By: {charter}";
 	}
 
+	public void SkipAnim() {
+		if (skipTween != null && skipTween.IsRunning()) {
+            skipTween.Kill();
+        }
+
+		skipTween = CreateTween();
+
+        skipTween.TweenProperty(skipLabel, "position:y", -90f, 0.07f)
+            .SetTrans(Tween.TransitionType.Back)
+            .SetEase(Tween.EaseType.Out);
+	}
+
     public override void _Process(double delta)
     {
 		songProgressBar.Value = MusicManager.Instance.songTime;
@@ -129,4 +147,21 @@ public partial class GameUIManager : CanvasLayer
 
 		songRemainingLabel.Text = $"-{minutes:00}:{seconds:00}";
     }
+
+	void InitialiseNodes() {
+		accuracyLabel = GetNode<RichTextLabel>("AccuracyLabel");
+		comboLabel = GetNode<RichTextLabel>("ComboLabel");
+		judgementLabel = GetNode<RichTextLabel>("JudgementLabel");
+		skipLabel = GetNode<RichTextLabel>("SkipLabel");
+
+		Node node = GetNode("SongDetails");
+		songTitleLabel = node.GetNode<RichTextLabel>("SongTitleLabel");
+		songArtistLabel = node.GetNode<RichTextLabel>("SongArtistLabel");
+		charterLabel = node.GetNode<RichTextLabel>("CharterLabel");
+
+		node = GetNode("ProgressBar");
+		songProgressLabel = node.GetNode<RichTextLabel>("ProgressLabel");
+		songRemainingLabel = node.GetNode<RichTextLabel>("RemainingLabel");
+		songProgressBar = node.GetNode<ProgressBar>("ProgressBar");
+	}
 }

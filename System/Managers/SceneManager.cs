@@ -6,6 +6,7 @@ public partial class SceneManager : Node
     public static SceneManager Instance { get; private set; }
 
 	[Export] PackedScene gameScene;
+	[Export] PackedScene songSelectScene;
 
 	[Export] RichTextLabel mainLabel;
 	[Export] RichTextLabel subLabel;
@@ -14,6 +15,7 @@ public partial class SceneManager : Node
 	
 	CanvasLayer transitionLayer;
 	ShaderMaterial shaderMaterial;
+	Tween transitionTween;
 
     public override void _Ready()
     {
@@ -31,6 +33,9 @@ public partial class SceneManager : Node
 			case Scene.Game:
 				nextScene = Instance.gameScene;
 				break;
+			case Scene.SongSelect:
+				nextScene = Instance.songSelectScene;
+				break;
 			default:
 				return;
 		}
@@ -39,6 +44,10 @@ public partial class SceneManager : Node
     }
 
 	async Task Transition(PackedScene scene, float duration, string mainText, string subText) {
+		if (transitionTween != null && transitionTween.IsRunning()) {
+            transitionTween.Kill();
+        }
+
 		transitionLayer.Visible = true;
 
 		mainLabel.Text = mainText;
@@ -47,25 +56,26 @@ public partial class SceneManager : Node
 		shaderMaterial.SetShaderParameter("progress", 0f);
 		shaderMaterial.SetShaderParameter("invert", true);
 
-		Tween transOut = CreateTween();
-        transOut.TweenProperty(shaderRect, "material:shader_parameter/progress", 1.5f, duration)
+		transitionTween = CreateTween();
+        transitionTween.TweenProperty(shaderRect, "material:shader_parameter/progress", 1.5f, duration)
 			.SetTrans(Tween.TransitionType.Back)
 			.SetEase(Tween.EaseType.Out);
-        await ToSignal(transOut, Tween.SignalName.Finished);
+        await ToSignal(transitionTween, Tween.SignalName.Finished);
 
 		GetTree().ChangeSceneToPacked(scene);
 
 		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
+		GetTree().Paused = false;
 
 		shaderMaterial.SetShaderParameter("progress", 0f);
 		shaderMaterial.SetShaderParameter("invert", false);
 
-        Tween transIn = CreateTween();
-        transIn.TweenProperty(shaderRect, "material:shader_parameter/progress", 1.5f, duration)
+        transitionTween = CreateTween();
+        transitionTween.TweenProperty(shaderRect, "material:shader_parameter/progress", 1.5f, duration)
 			.SetDelay(0.15f)
 			.SetTrans(Tween.TransitionType.Back)
 			.SetEase(Tween.EaseType.Out);
-        await ToSignal(transIn, Tween.SignalName.Finished);
+        await ToSignal(transitionTween, Tween.SignalName.Finished);
 
         transitionLayer.Visible = false;
 	}

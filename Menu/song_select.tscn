@@ -5,6 +5,7 @@
 
 [node name="SongSelect" type="CanvasLayer" unique_id=1352502293]
 script = ExtResource("1_sn5hh")
+debounceTime = 0.2
 
 [node name="ColorRect" type="ColorRect" parent="." unique_id=1217655154]
 anchors_preset = 15
