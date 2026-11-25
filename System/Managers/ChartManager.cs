@@ -3,8 +3,6 @@ using System;
 
 public partial class ChartManager : Node
 {
-	public GameManager gameManager;
-
 	NoteManager noteManager;
 	HitField hitField;
 	UIManager uiManager;
@@ -30,7 +28,7 @@ public partial class ChartManager : Node
 		chart = _chart;
 
 		lookAhead = (int)((hitField.Position.Y - noteManager.Position.Y) * 1000 / _gameSettings.scrollSpeed);
-		_ = MusicManager.Instance.StartAudio(-lookAhead-_gameSettings.startTime);
+        _ = MusicManager.Instance.StartAudio(-lookAhead - _gameSettings.startTime);
 
 		chartLength = chart.HitObjects[^1].StartTime;
 		skipThresh = chart.HitObjects[0].StartTime - lookAhead - _gameSettings.startTime - _gameSettings.skipThresh;

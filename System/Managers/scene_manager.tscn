@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://ddofev7yran3h" path="res://Gameplay/game.tscn" id="2_i4ya2"]
 [ext_resource type="PackedScene" uid="uid://t4uum6j461y2" path="res://Menu/song_select.tscn" id="3_ajinl"]
 [ext_resource type="Theme" uid="uid://dkqf73l6hqg84" path="res://Assets/Themes/default_theme.tres" id="3_efmy2"]
+[ext_resource type="PackedScene" uid="uid://bfx0jgrft7hfd" path="res://Menu/results_screen.tscn" id="4_hha4l"]
 [ext_resource type="Shader" uid="uid://bc6bdpflajcmf" path="res://External/transition.gdshader" id="4_pgk2r"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gl68d"]
@@ -42,6 +43,7 @@ process_mode = 3
 script = ExtResource("1_awcvy")
 gameScene = ExtResource("2_i4ya2")
 songSelectScene = ExtResource("3_ajinl")
+resultsScene = ExtResource("4_hha4l")
 mainLabel = NodePath("CanvasLayer/TextureRect/CenterContainer/VBoxContainer/MainLabel")
 subLabel = NodePath("CanvasLayer/TextureRect/CenterContainer/VBoxContainer/SubLabel")
 shaderRect = NodePath("CanvasLayer/SubViewport/ColorRect")

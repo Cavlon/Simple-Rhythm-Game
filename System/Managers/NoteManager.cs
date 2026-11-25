@@ -15,25 +15,27 @@ public partial class NoteManager : Node2D
 	int scrollSpeed;
 
 	int[] spawnPositions = new int[4];
-	Note[] notePool;
+	int endPosY;
+
 	Queue<(int, int)>[] activeNotes = new Queue<(int, int)>[4];
-	int pullInd = 0;
+
+	Note[] notePool;
+	int poolInd = 0;
 	int poolCount;
 
-	HitField hitField;
-	int hitFieldCenter;
 	float[] judgements = new float[4];
 
 	[Signal]
     public delegate void NoteJudgedEventHandler(int judgement, float errorTime);
 
-	public void Initialise(HitField _hitfield)
+	public void Initialise(int screenHeight)
 	{
 		_gameSettings = DataManager.GameplaySettings;
 		_styleSettings = DataManager.StyleSettings;
 
 		scrollSpeed = _gameSettings.scrollSpeed;
-		hitField = _hitfield;
+
+		endPosY = (int)Position.Y + screenHeight*2;
 
 		int paddedWidth = _styleSettings.playfieldWidth - _styleSettings.playfieldPadding * 2;
 
@@ -51,11 +53,10 @@ public partial class NoteManager : Node2D
 		for (int i = 0; i < poolCount; i++) {
 			Note note = noteScene.Instantiate<Note>();
 			noteHolder.AddChild(note);
-			note.Scale = Vector2.One * _styleSettings.receptorScale;
+			note.Initialise(endPosY);
+			note.Scale = Vector2.One * _styleSettings.receptorScale * 0.5f;
 			notePool[i] = note;
 		}
-
-		hitFieldCenter = (int)hitField.Position.Y - _gameSettings.hitOffset;
 
 		judgements[0] = _gameSettings.marvelousWindow;
         judgements[1] = _gameSettings.perfectWindow;
@@ -69,29 +70,32 @@ public partial class NoteManager : Node2D
         {
             while (activeNotes[i].Count > 0)
             {
-                int poolIndex = activeNotes[i].Peek().Item1;
-                Note note = notePool[poolIndex];
+                (int, int) activeNote = activeNotes[i].Peek();
+				int error = MusicManager.Instance.songTime - activeNote.Item2;
 
-                if (note.Position.Y < 400) 
+                if (error < judgements[2]) 
                     break;
+				
+				Note note = notePool[activeNote.Item1];
 
-				EmitSignal(SignalName.NoteJudged, 3, -1);
+				EmitSignal(SignalName.NoteJudged, 3, judgements[3]);
                 activeNotes[i].Dequeue();
-                note.Disable();
+                note.Kill();
                 poolCount++;
             }
         }
 	}
 
-	public void SpawnNote(int lane, int startTime) {
+	public void SpawnNote(int lane, int hitTime) {
 		if (poolCount == 0) {
 			GD.PrintErr("Note Pool Empty");
+			return;
 		}
 
-		activeNotes[lane].Enqueue((pullInd, startTime));
-		notePool[pullInd].Spawn(spawnPositions[lane], Position.Y, noteTextures[lane]);
+		activeNotes[lane].Enqueue((poolInd, hitTime));
+		notePool[poolInd].Spawn(spawnPositions[lane], Position.Y, noteTextures[lane]);
 
-		pullInd = (pullInd + 1) % _gameSettings.notePoolSize;
+		poolInd = (poolInd + 1) % _gameSettings.notePoolSize;
 		poolCount--;
 	}
 
@@ -116,7 +120,7 @@ public partial class NoteManager : Node2D
 
 		for (int i = 0; i < 4; i++) {
 			if (dist < judgements[i]) {
-				EmitSignal(SignalName.NoteJudged, i, dist);
+				EmitSignal(SignalName.NoteJudged, i, error);
 
 				activeNotes[lane].Dequeue();
 				note.Disable();

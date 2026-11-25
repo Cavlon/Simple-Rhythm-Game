@@ -1,5 +1,11 @@
+using System;
 using System.Threading.Tasks;
 using Godot;
+
+public interface IInitialisable {
+    void Init(object data);
+}
+
 public partial class SceneManager : Node
 {
     // Singleton instance
@@ -7,6 +13,7 @@ public partial class SceneManager : Node
 
 	[Export] PackedScene gameScene;
 	[Export] PackedScene songSelectScene;
+	[Export] PackedScene resultsScene;
 
 	[Export] RichTextLabel mainLabel;
 	[Export] RichTextLabel subLabel;
@@ -25,25 +32,20 @@ public partial class SceneManager : Node
 		transitionLayer = GetNode<CanvasLayer>("CanvasLayer");
     }
 
-    public static async void ChangeScene(Scene scene, float duration, string mainText = "", string subText = "")
+	public static async void ChangeScene(Scene scene, float duration, string mainText = "", string subText = "", object data = null)
     {
-        PackedScene nextScene;
+		GD.Print($"Changing Scene to {scene}");
+        PackedScene nextScene = Instance.GetScene(scene);
+		if (nextScene == null) return;
 
-        switch (scene) {
-			case Scene.Game:
-				nextScene = Instance.gameScene;
-				break;
-			case Scene.SongSelect:
-				nextScene = Instance.songSelectScene;
-				break;
-			default:
-				return;
-		}
-
-		await Instance.Transition(nextScene, duration, mainText, subText);
+		await Instance.Transition(nextScene, duration, mainText, subText, onInstantiate: node =>
+		{
+			if (data != null && node is IInitialisable initNode)
+				initNode.Init(data);
+		});
     }
 
-	async Task Transition(PackedScene scene, float duration, string mainText, string subText) {
+	async Task Transition(PackedScene scene, float duration, string mainText, string subText, Action<Node> onInstantiate) {
 		if (transitionTween != null && transitionTween.IsRunning()) {
             transitionTween.Kill();
         }
@@ -62,10 +64,10 @@ public partial class SceneManager : Node
 			.SetEase(Tween.EaseType.Out);
         await ToSignal(transitionTween, Tween.SignalName.Finished);
 
-		GetTree().ChangeSceneToPacked(scene);
+		UpdateScene(scene, onInstantiate);
 
-		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 		GetTree().Paused = false;
+		await ToSignal(GetTree(), SceneTree.SignalName.ProcessFrame);
 
 		shaderMaterial.SetShaderParameter("progress", 0f);
 		shaderMaterial.SetShaderParameter("invert", false);
@@ -80,9 +82,30 @@ public partial class SceneManager : Node
         transitionLayer.Visible = false;
 	}
 
+	void UpdateScene(PackedScene scene, Action<Node> onInstantiate) {
+		Node nextScene = scene.Instantiate();
+        onInstantiate?.Invoke(nextScene);
+
+        Node oldScene = GetTree().CurrentScene;
+        GetTree().Root.AddChild(nextScene);
+        GetTree().CurrentScene = nextScene;
+        oldScene?.QueueFree();
+	}
+
+	PackedScene GetScene(Scene scene) {
+        return scene switch
+        {
+            Scene.Game => Instance.gameScene,
+            Scene.SongSelect => Instance.songSelectScene,
+            Scene.Results => Instance.resultsScene,
+            _ => null,
+        };
+    }
+
 	public enum Scene {
 		MainMenu,
 		SongSelect,
-		Game
+		Game,
+		Results
 	}
 }

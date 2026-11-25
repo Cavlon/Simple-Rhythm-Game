@@ -1,42 +1,55 @@
 using Godot;
 using System;
 
-public partial class Note : Node2D
+public partial class Note : Sprite2D
 {
 
 	Vector2 notePos;
-	public bool alive;
+	int resetPosY;
 	
-	Sprite2D sprite;
+	Color deadColour = new(0.4f, 0.4f, 0.4f, 0.75f);
 
+	int scrollSpeed;
 	GameplaySettings _gameSettings;
 
 	// Called when the node enters the scene tree for the first time.
-	public override void _Ready()
+	public void Initialise(int _resetPosY)
 	{
-		_gameSettings = DataManager.GameplaySettings;
-		sprite = GetNode<Sprite2D>("Sprite2D");
+		scrollSpeed = DataManager.GameplaySettings.scrollSpeed;
+		resetPosY = _resetPosY;
 		Disable();
 	}
 
     public override void _Process(double delta)
     {
-		notePos.Y += _gameSettings.scrollSpeed * (float)delta;
+		notePos.Y += scrollSpeed * (float)delta;
+
+		if (notePos.Y >= resetPosY) {
+			Disable();
+			return;
+		}
+
 		Position = notePos;
     }
 
 	public void Spawn(int spawnPosX, float spawnPosY, Texture2D noteTexture) {
 		Visible = true;
-		alive = true;
+		Modulate = Colors.White;
+
 		notePos.X = spawnPosX;
 		notePos.Y = spawnPosY;
 		Position = notePos;
-		sprite.Texture = noteTexture;
+
+		Texture = noteTexture;
 		SetProcess(true);
 	}
 
 	public void Disable() {
 		Visible = false;
 		SetProcess(false);
+	}
+
+	public void Kill() {
+		Modulate = deadColour;
 	}
 }

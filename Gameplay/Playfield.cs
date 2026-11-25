@@ -21,13 +21,15 @@ public partial class Playfield : Node2D
 		noteManager = GetNode<NoteManager>("NoteManager");
 		hitField = GetNode<HitField>("Hitfield");
 
-		noteManager.Initialise(hitField);
+		Vector2 viewportSize = GetViewportRect().Size;
+
+		hitField.Position = new Vector2(0, viewportSize.Y / 2 - _gameSettings.receptorPosY - _gameSettings.hitOffset);
+		noteManager.Position = hitField.Position + Vector2.Up * viewportSize.Y;
+
+		hitField.Initialise();
+		noteManager.Initialise((int)viewportSize.Y);
 
 		backgroundSprite.Scale = new Vector2((float)_styleSettings.playfieldWidth / backgroundSprite.Texture.GetWidth(), 1f);
 		backgroundSprite.Modulate = new Color(Colors.White, _styleSettings.playfieldOpacity);
-
-		Vector2 viewportSize = GetViewportRect().Size;
-
-		hitField.Position = new Vector2(0, viewportSize.Y / 2 - _gameSettings.receptorPosY);
 	}
 }
